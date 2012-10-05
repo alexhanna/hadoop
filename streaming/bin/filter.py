@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 
-import nltk, json
-import re, string, sys
+import nltk, json, os, re, string, sys, time
 
 latinList   = []
 unicodeList = []
 
 def loadKeywords():
-    f = open('latinKeywords.txt', 'r')
+    f = open('../data/latinKeywords.txt', 'r')
     for line in f:
+        line = line.lower()
         latinList.append( line.strip() )
     f.close()
 
@@ -20,17 +20,11 @@ def loadKeywords():
 
 def main():
     loadKeywords()
-
-    ## ignore case for Latin
-    latinRe   = re.compile( string.join(latinList, '|'), re.I | re.M )
-    unicodeRe = re.compile( string.join(unicodeList, '|'), re.U | re.M )
     
-    while True:
-        line = sys.stdin.readline()
+    for line in sys.stdin:
         if len(line) == 0:
             break
 
-        ## apply text transforms
         v = line.strip()
 
         data = ''
@@ -42,17 +36,26 @@ def main():
             continue
                 
         if 'text' in data:
-            text = data['text']            
+            # Parse data in the format of
+            # Sat Mar 12 01:49:55 +0000 2011
+            d  = string.split( data['created_at'], ' ')
+            ds = ' '.join([d[1], d[2], d[3], d[5] ])
+            dt = time.strptime(ds, '%b %d %H:%M:%S %Y')
+
+            date = time.strftime('%Y-%m-%d %H:00:00')
+
+            ## turn text into lower case
+            text = data['text'].lower()
             rt   = ''
             if 'retweeted_status' in data:
-                rt = data['retweeted_status']['text']
-            
-            if latinRe.search(text) or unicodeRe.search(text):
-                print v
-            elif rt != '' and (latinRe.search(rt) or unicodeRe.search(rt)):
-                print v
-            else:
-                data = 0
+                rt = data['retweeted_status']['text'].lower()
+
+            for word in latinList:
+                if rt != '':
+                    if word in rt:
+                        print '%s\t%s\t%s' % (date, word, 1)
+                elif word in text:
+                    print '%s\t%s\t%s' % (date, word, 1)                    
 
 if __name__ == '__main__':
     main()
