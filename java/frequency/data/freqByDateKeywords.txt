@@ -1,0 +1,601 @@
+2011-12-31	planned parenthood	2
+2011-12-31	rush limbaugh	1
+2012-01-01	komen	3
+2012-01-01	planned parenthood	21
+2012-01-01	rush limbaugh	3
+2012-01-01	zimmerman	16
+2012-01-02	komen	10
+2012-01-02	planned parenthood	28
+2012-01-02	rush limbaugh	12
+2012-01-02	zimmerman	30
+2012-01-03	komen	3
+2012-01-03	planned parenthood	83
+2012-01-03	rush limbaugh	49
+2012-01-03	zimmerman	6
+2012-01-04	komen	5
+2012-01-04	planned parenthood	156
+2012-01-04	rush limbaugh	47
+2012-01-04	zimmerman	6
+2012-01-05	komen	3
+2012-01-05	planned parenthood	81
+2012-01-05	rush limbaugh	37
+2012-01-05	zimmerman	7
+2012-01-06	komen	5
+2012-01-06	planned parenthood	43
+2012-01-06	rush limbaugh	14
+2012-01-06	trayvon	1
+2012-01-06	zimmerman	5
+2012-01-07	komen	7
+2012-01-07	planned parenthood	11
+2012-01-07	rush limbaugh	13
+2012-01-07	zimmerman	8
+2012-01-08	komen	3
+2012-01-08	planned parenthood	3
+2012-01-08	rush limbaugh	6
+2012-01-08	zimmerman	4
+2012-01-09	komen	5
+2012-01-09	planned parenthood	4
+2012-01-09	rush limbaugh	9
+2012-01-09	zimmerman	2
+2012-01-10	rush limbaugh	1
+2012-01-11	komen	4
+2012-01-11	planned parenthood	36
+2012-01-11	rush limbaugh	39
+2012-01-11	zimmerman	2
+2012-01-12	komen	13
+2012-01-12	planned parenthood	52
+2012-01-12	rush limbaugh	41
+2012-01-12	zimmerman	2
+2012-01-13	komen	8
+2012-01-13	planned parenthood	57
+2012-01-13	rush limbaugh	111
+2012-01-13	zimmerman	11
+2012-01-14	komen	7
+2012-01-14	planned parenthood	133
+2012-01-14	rush limbaugh	55
+2012-01-14	zimmerman	8
+2012-01-15	komen	8
+2012-01-15	planned parenthood	32
+2012-01-15	rush limbaugh	41
+2012-01-15	zimmerman	5
+2012-01-16	komen	11
+2012-01-16	planned parenthood	118
+2012-01-16	rush limbaugh	31
+2012-01-16	zimmerman	8
+2012-01-17	komen	7
+2012-01-17	planned parenthood	28
+2012-01-17	rush limbaugh	15
+2012-01-17	zimmerman	9
+2012-01-24	komen	1
+2012-01-24	planned parenthood	7
+2012-01-24	rush limbaugh	3
+2012-01-24	zimmerman	2
+2012-02-09	komen	364
+2012-02-09	planned parenthood	451
+2012-02-09	rush limbaugh	85
+2012-02-09	zimmerman	16
+2012-02-10	komen	363
+2012-02-10	planned parenthood	707
+2012-02-10	rush limbaugh	91
+2012-02-10	zimmerman	27
+2012-02-11	komen	151
+2012-02-11	planned parenthood	325
+2012-02-11	rush limbaugh	36
+2012-02-11	zimmerman	14
+2012-02-12	komen	87
+2012-02-12	planned parenthood	180
+2012-02-12	rush limbaugh	15
+2012-02-12	zimmerman	12
+2012-02-13	komen	259
+2012-02-13	planned parenthood	273
+2012-02-13	rush limbaugh	55
+2012-02-13	zimmerman	14
+2012-02-14	komen	101
+2012-02-14	planned parenthood	284
+2012-02-14	rush limbaugh	67
+2012-02-14	zimmerman	12
+2012-02-15	komen	86
+2012-02-15	planned parenthood	299
+2012-02-15	rush limbaugh	69
+2012-02-15	trayvon	1
+2012-02-15	zimmerman	9
+2012-02-16	komen	62
+2012-02-16	planned parenthood	462
+2012-02-16	rush limbaugh	124
+2012-02-16	sandra fluke	68
+2012-02-16	trayvon	1
+2012-02-16	zimmerman	16
+2012-02-17	komen	132
+2012-02-17	planned parenthood	373
+2012-02-17	rush limbaugh	78
+2012-02-17	sandra fluke	5
+2012-02-17	zimmerman	42
+2012-02-18	komen	57
+2012-02-18	planned parenthood	288
+2012-02-18	rush limbaugh	86
+2012-02-18	sandra fluke	3
+2012-02-18	zimmerman	66
+2012-02-19	komen	34
+2012-02-19	planned parenthood	348
+2012-02-19	rush limbaugh	40
+2012-02-19	zimmerman	18
+2012-02-20	komen	62
+2012-02-20	planned parenthood	183
+2012-02-20	rush limbaugh	50
+2012-02-20	zimmerman	37
+2012-02-21	komen	48
+2012-02-21	planned parenthood	218
+2012-02-21	rush limbaugh	108
+2012-02-21	sandra fluke	5
+2012-02-21	zimmerman	16
+2012-02-22	komen	64
+2012-02-22	planned parenthood	592
+2012-02-22	rush limbaugh	62
+2012-02-22	sandra fluke	19
+2012-02-22	zimmerman	20
+2012-02-23	komen	80
+2012-02-23	planned parenthood	351
+2012-02-23	rush limbaugh	54
+2012-02-23	sandra fluke	153
+2012-02-23	zimmerman	59
+2012-02-24	komen	45
+2012-02-24	planned parenthood	349
+2012-02-24	rush limbaugh	62
+2012-02-24	sandra fluke	4
+2012-02-24	zimmerman	35
+2012-02-25	komen	38
+2012-02-25	planned parenthood	126
+2012-02-25	rush limbaugh	58
+2012-02-25	sandra fluke	3
+2012-02-25	trayvon	1
+2012-02-25	zimmerman	37
+2012-02-26	komen	28
+2012-02-26	planned parenthood	119
+2012-02-26	rush limbaugh	107
+2012-02-26	sandra fluke	1
+2012-02-26	zimmerman	104
+2012-02-27	komen	56
+2012-02-27	planned parenthood	242
+2012-02-27	rush limbaugh	134
+2012-02-27	trayvon	1
+2012-02-27	zimmerman	19
+2012-02-28	komen	22
+2012-02-28	planned parenthood	262
+2012-02-28	rush limbaugh	132
+2012-02-28	sandra fluke	1
+2012-02-28	zimmerman	21
+2012-02-29	komen	25
+2012-02-29	planned parenthood	155
+2012-02-29	rush limbaugh	194
+2012-02-29	sandra fluke	88
+2012-02-29	zimmerman	7
+2012-03-01	komen	44
+2012-03-01	planned parenthood	236
+2012-03-01	rush limbaugh	6442
+2012-03-01	sandra fluke	909
+2012-03-01	zimmerman	20
+2012-03-02	komen	119
+2012-03-02	planned parenthood	227
+2012-03-02	rush limbaugh	12799
+2012-03-02	sandra fluke	5038
+2012-03-02	trayvon	3
+2012-03-02	zimmerman	41
+2012-03-03	komen	71
+2012-03-03	planned parenthood	170
+2012-03-03	rush limbaugh	9370
+2012-03-03	sandra fluke	2966
+2012-03-03	zimmerman	34
+2012-03-04	komen	81
+2012-03-04	planned parenthood	166
+2012-03-04	rush limbaugh	5551
+2012-03-04	sandra fluke	1426
+2012-03-04	zimmerman	17
+2012-03-05	komen	69
+2012-03-05	planned parenthood	357
+2012-03-05	rush limbaugh	12102
+2012-03-05	sandra fluke	3876
+2012-03-05	zimmerman	24
+2012-03-06	komen	44
+2012-03-06	planned parenthood	264
+2012-03-06	rush limbaugh	8742
+2012-03-06	sandra fluke	2351
+2012-03-06	zimmerman	36
+2012-03-07	komen	59
+2012-03-07	planned parenthood	589
+2012-03-07	rush limbaugh	4252
+2012-03-07	sandra fluke	1604
+2012-03-07	trayvon	1
+2012-03-07	zimmerman	19
+2012-03-08	komen	29
+2012-03-08	planned parenthood	504
+2012-03-08	rush limbaugh	4403
+2012-03-08	sandra fluke	928
+2012-03-08	trayvon	48
+2012-03-08	zimmerman	25
+2012-03-09	komen	36
+2012-03-09	planned parenthood	331
+2012-03-09	rush limbaugh	3151
+2012-03-09	sandra fluke	963
+2012-03-09	trayvon	49
+2012-03-09	zimmerman	56
+2012-03-10	komen	26
+2012-03-10	planned parenthood	242
+2012-03-10	rush limbaugh	1869
+2012-03-10	sandra fluke	443
+2012-03-10	trayvon	39
+2012-03-10	zimmerman	41
+2012-03-11	komen	21
+2012-03-11	planned parenthood	230
+2012-03-11	rush limbaugh	1107
+2012-03-11	sandra fluke	224
+2012-03-11	trayvon	23
+2012-03-11	zimmerman	31
+2012-03-12	komen	24
+2012-03-12	planned parenthood	399
+2012-03-12	rush limbaugh	2137
+2012-03-12	sandra fluke	310
+2012-03-12	trayvon	168
+2012-03-12	zimmerman	62
+2012-03-13	komen	39
+2012-03-13	planned parenthood	3418
+2012-03-13	rush limbaugh	1155
+2012-03-13	sandra fluke	833
+2012-03-13	trayvon	312
+2012-03-13	zimmerman	117
+2012-03-14	#iamtrayvonmartin	1
+2012-03-14	komen	41
+2012-03-14	planned parenthood	4497
+2012-03-14	rush limbaugh	1149
+2012-03-14	sandra fluke	479
+2012-03-14	trayvon	871
+2012-03-14	zimmerman	122
+2012-03-15	komen	93
+2012-03-15	planned parenthood	1625
+2012-03-15	rush limbaugh	1350
+2012-03-15	sandra fluke	891
+2012-03-15	trayvon	408
+2012-03-15	zimmerman	87
+2012-03-16	komen	56
+2012-03-16	planned parenthood	3487
+2012-03-16	rush limbaugh	940
+2012-03-16	sandra fluke	211
+2012-03-16	trayvon	877
+2012-03-16	zimmerman	215
+2012-03-17	komen	62
+2012-03-17	planned parenthood	538
+2012-03-17	rush limbaugh	414
+2012-03-17	sandra fluke	127
+2012-03-17	trayvon	2341
+2012-03-17	zimmerman	510
+2012-03-18	#iamtrayvonmartin	5
+2012-03-18	komen	23
+2012-03-18	planned parenthood	257
+2012-03-18	rush limbaugh	320
+2012-03-18	sandra fluke	91
+2012-03-18	trayvon	2696
+2012-03-18	zimmerman	632
+2012-03-19	komen	38
+2012-03-19	planned parenthood	272
+2012-03-19	rush limbaugh	667
+2012-03-19	sandra fluke	181
+2012-03-19	trayvon	9439
+2012-03-19	zimmerman	1639
+2012-03-20	#iamtrayvonmartin	6
+2012-03-20	komen	132
+2012-03-20	planned parenthood	592
+2012-03-20	rush limbaugh	489
+2012-03-20	sandra fluke	253
+2012-03-20	trayvon	9571
+2012-03-20	zimmerman	2641
+2012-03-21	#iamtrayvonmartin	21
+2012-03-21	komen	113
+2012-03-21	planned parenthood	266
+2012-03-21	rush limbaugh	395
+2012-03-21	sandra fluke	301
+2012-03-21	trayvon	14777
+2012-03-21	zimmerman	2385
+2012-03-22	#iamtrayvonmartin	19
+2012-03-22	komen	261
+2012-03-22	planned parenthood	500
+2012-03-22	rush limbaugh	871
+2012-03-22	sandra fluke	306
+2012-03-22	trayvon	12061
+2012-03-22	zimmerman	1896
+2012-03-23	#iamtrayvonmartin	227
+2012-03-23	komen	136
+2012-03-23	planned parenthood	244
+2012-03-23	rush limbaugh	560
+2012-03-23	sandra fluke	108
+2012-03-23	trayvon	19309
+2012-03-23	zimmerman	3912
+2012-03-24	#iamtrayvonmartin	21
+2012-03-24	komen	30
+2012-03-24	planned parenthood	117
+2012-03-24	rush limbaugh	260
+2012-03-24	sandra fluke	58
+2012-03-24	trayvon	10398
+2012-03-24	zimmerman	4429
+2012-03-25	#iamtrayvonmartin	13
+2012-03-25	komen	32
+2012-03-25	planned parenthood	34
+2012-03-25	rush limbaugh	131
+2012-03-25	sandra fluke	26
+2012-03-25	trayvon	9587
+2012-03-25	zimmerman	5282
+2012-03-26	#iamtrayvonmartin	18
+2012-03-26	komen	27
+2012-03-26	planned parenthood	230
+2012-03-26	rush limbaugh	340
+2012-03-26	sandra fluke	102
+2012-03-26	trayvon	16251
+2012-03-26	zimmerman	8115
+2012-03-27	#iamtrayvonmartin	5
+2012-03-27	komen	38
+2012-03-27	planned parenthood	133
+2012-03-27	rush limbaugh	374
+2012-03-27	sandra fluke	43
+2012-03-27	trayvon	11352
+2012-03-27	zimmerman	6834
+2012-03-28	#iamtrayvonmartin	12
+2012-03-28	komen	131
+2012-03-28	planned parenthood	252
+2012-03-28	rush limbaugh	364
+2012-03-28	sandra fluke	79
+2012-03-28	trayvon	12342
+2012-03-28	zimmerman	9787
+2012-03-29	#iamtrayvonmartin	4
+2012-03-29	komen	45
+2012-03-29	planned parenthood	231
+2012-03-29	rush limbaugh	715
+2012-03-29	sandra fluke	166
+2012-03-29	trayvon	9447
+2012-03-29	zimmerman	9299
+2012-03-30	#iamtrayvonmartin	13
+2012-03-30	komen	39
+2012-03-30	planned parenthood	418
+2012-03-30	rush limbaugh	437
+2012-03-30	sandra fluke	25
+2012-03-30	trayvon	5286
+2012-03-30	zimmerman	5014
+2012-03-31	#iamtrayvonmartin	2
+2012-03-31	komen	61
+2012-03-31	planned parenthood	389
+2012-03-31	rush limbaugh	164
+2012-03-31	sandra fluke	34
+2012-03-31	trayvon	4609
+2012-03-31	zimmerman	3354
+2012-04-01	#iamtrayvonmartin	4
+2012-04-01	komen	33
+2012-04-01	planned parenthood	177
+2012-04-01	rush limbaugh	260
+2012-04-01	sandra fluke	30
+2012-04-01	trayvon	3424
+2012-04-01	zimmerman	2436
+2012-04-02	#iamtrayvonmartin	2
+2012-04-02	komen	55
+2012-04-02	planned parenthood	2016
+2012-04-02	rush limbaugh	451
+2012-04-02	sandra fluke	49
+2012-04-02	trayvon	3924
+2012-04-02	zimmerman	2864
+2012-04-03	#iamtrayvonmartin	3
+2012-04-03	komen	25
+2012-04-03	planned parenthood	842
+2012-04-03	rush limbaugh	300
+2012-04-03	sandra fluke	190
+2012-04-03	trayvon	2343
+2012-04-03	zimmerman	1685
+2012-04-04	#iamtrayvonmartin	3
+2012-04-04	komen	25
+2012-04-04	planned parenthood	549
+2012-04-04	rush limbaugh	393
+2012-04-04	sandra fluke	41
+2012-04-04	trayvon	2219
+2012-04-04	zimmerman	1871
+2012-04-05	#iamtrayvonmartin	1
+2012-04-05	komen	43
+2012-04-05	planned parenthood	486
+2012-04-05	rush limbaugh	445
+2012-04-05	sandra fluke	88
+2012-04-05	trayvon	2214
+2012-04-05	zimmerman	1804
+2012-04-06	komen	55
+2012-04-06	planned parenthood	518
+2012-04-06	rush limbaugh	285
+2012-04-06	sandra fluke	38
+2012-04-06	trayvon	2411
+2012-04-06	zimmerman	1866
+2012-04-07	komen	36
+2012-04-07	planned parenthood	276
+2012-04-07	rush limbaugh	159
+2012-04-07	sandra fluke	10
+2012-04-07	trayvon	1825
+2012-04-07	zimmerman	1479
+2012-04-08	#iamtrayvonmartin	1
+2012-04-08	komen	16
+2012-04-08	planned parenthood	98
+2012-04-08	rush limbaugh	145
+2012-04-08	sandra fluke	7
+2012-04-08	trayvon	1161
+2012-04-08	zimmerman	636
+2012-04-09	#iamtrayvonmartin	3
+2012-04-09	komen	12
+2012-04-09	planned parenthood	193
+2012-04-09	rush limbaugh	324
+2012-04-09	sandra fluke	22
+2012-04-09	trayvon	3521
+2012-04-09	zimmerman	2578
+2012-04-10	#iamtrayvonmartin	1
+2012-04-10	komen	28
+2012-04-10	planned parenthood	247
+2012-04-10	rush limbaugh	388
+2012-04-10	sandra fluke	69
+2012-04-10	trayvon	5500
+2012-04-10	zimmerman	9881
+2012-04-11	#iamtrayvonmartin	2
+2012-04-11	komen	25
+2012-04-11	planned parenthood	994
+2012-04-11	rush limbaugh	223
+2012-04-11	sandra fluke	61
+2012-04-11	trayvon	18481
+2012-04-11	zimmerman	22057
+2012-04-12	#iamtrayvonmartin	1
+2012-04-12	komen	56
+2012-04-12	planned parenthood	908
+2012-04-12	rush limbaugh	391
+2012-04-12	sandra fluke	344
+2012-04-12	trayvon	3722
+2012-04-12	zimmerman	4834
+2012-04-13	komen	199
+2012-04-13	planned parenthood	495
+2012-04-13	rush limbaugh	418
+2012-04-13	sandra fluke	222
+2012-04-13	trayvon	1505
+2012-04-13	zimmerman	1630
+2012-04-14	#iamtrayvonmartin	2
+2012-04-14	komen	81
+2012-04-14	planned parenthood	393
+2012-04-14	rush limbaugh	138
+2012-04-14	sandra fluke	64
+2012-04-14	trayvon	1324
+2012-04-14	zimmerman	909
+2012-04-15	#iamtrayvonmartin	1
+2012-04-15	komen	31
+2012-04-15	planned parenthood	417
+2012-04-15	rush limbaugh	98
+2012-04-15	sandra fluke	56
+2012-04-15	trayvon	1002
+2012-04-15	zimmerman	450
+2012-04-16	komen	118
+2012-04-16	planned parenthood	393
+2012-04-16	rush limbaugh	238
+2012-04-16	sandra fluke	65
+2012-04-16	trayvon	1280
+2012-04-16	zimmerman	867
+2012-04-17	komen	48
+2012-04-17	planned parenthood	551
+2012-04-17	rush limbaugh	200
+2012-04-17	sandra fluke	106
+2012-04-17	trayvon	1051
+2012-04-17	zimmerman	498
+2012-04-18	#iamtrayvonmartin	1
+2012-04-18	komen	43
+2012-04-18	planned parenthood	623
+2012-04-18	rush limbaugh	267
+2012-04-18	sandra fluke	57
+2012-04-18	trayvon	989
+2012-04-18	zimmerman	611
+2012-04-19	komen	52
+2012-04-19	planned parenthood	507
+2012-04-19	rush limbaugh	179
+2012-04-19	sandra fluke	26
+2012-04-19	trayvon	703
+2012-04-19	zimmerman	505
+2012-04-20	komen	48
+2012-04-20	planned parenthood	501
+2012-04-20	rush limbaugh	175
+2012-04-20	sandra fluke	10
+2012-04-20	trayvon	2500
+2012-04-20	zimmerman	5977
+2012-04-21	komen	39
+2012-04-21	planned parenthood	175
+2012-04-21	rush limbaugh	254
+2012-04-21	sandra fluke	24
+2012-04-21	trayvon	546
+2012-04-21	zimmerman	973
+2012-04-22	#iamtrayvonmartin	2
+2012-04-22	komen	30
+2012-04-22	planned parenthood	126
+2012-04-22	rush limbaugh	130
+2012-04-22	sandra fluke	14
+2012-04-22	trayvon	646
+2012-04-22	zimmerman	1208
+2012-04-23	komen	42
+2012-04-23	planned parenthood	626
+2012-04-23	rush limbaugh	584
+2012-04-23	sandra fluke	335
+2012-04-23	trayvon	1669
+2012-04-23	zimmerman	3479
+2012-04-24	komen	19
+2012-04-24	planned parenthood	433
+2012-04-24	rush limbaugh	347
+2012-04-24	sandra fluke	440
+2012-04-24	trayvon	1559
+2012-04-24	zimmerman	848
+2012-04-25	komen	33
+2012-04-25	planned parenthood	394
+2012-04-25	rush limbaugh	399
+2012-04-25	sandra fluke	230
+2012-04-25	trayvon	756
+2012-04-25	zimmerman	809
+2012-04-26	komen	50
+2012-04-26	planned parenthood	323
+2012-04-26	rush limbaugh	489
+2012-04-26	sandra fluke	502
+2012-04-26	trayvon	860
+2012-04-26	zimmerman	1551
+2012-04-27	komen	26
+2012-04-27	planned parenthood	199
+2012-04-27	rush limbaugh	269
+2012-04-27	sandra fluke	241
+2012-04-27	trayvon	640
+2012-04-27	zimmerman	1051
+2012-04-28	komen	62
+2012-04-28	planned parenthood	245
+2012-04-28	rush limbaugh	193
+2012-04-28	sandra fluke	49
+2012-04-28	trayvon	192
+2012-04-28	zimmerman	255
+2012-04-29	komen	31
+2012-04-29	planned parenthood	100
+2012-04-29	rush limbaugh	113
+2012-04-29	sandra fluke	107
+2012-04-29	trayvon	282
+2012-04-29	zimmerman	290
+2012-04-30	komen	31
+2012-04-30	planned parenthood	708
+2012-04-30	rush limbaugh	162
+2012-04-30	sandra fluke	77
+2012-04-30	trayvon	226
+2012-04-30	zimmerman	300
+2012-05-01	komen	39
+2012-05-01	planned parenthood	752
+2012-05-01	rush limbaugh	113
+2012-05-01	sandra fluke	35
+2012-05-01	trayvon	244
+2012-05-01	zimmerman	279
+2012-05-02	komen	23
+2012-05-02	planned parenthood	324
+2012-05-02	rush limbaugh	151
+2012-05-02	sandra fluke	72
+2012-05-02	trayvon	470
+2012-05-02	zimmerman	475
+2012-05-03	komen	67
+2012-05-03	planned parenthood	198
+2012-05-03	rush limbaugh	103
+2012-05-03	sandra fluke	133
+2012-05-03	trayvon	404
+2012-05-03	zimmerman	433
+2012-05-04	komen	75
+2012-05-04	planned parenthood	673
+2012-05-04	rush limbaugh	294
+2012-05-04	sandra fluke	52
+2012-05-04	trayvon	318
+2012-05-04	zimmerman	299
+2012-05-05	komen	28
+2012-05-05	planned parenthood	1165
+2012-05-05	rush limbaugh	85
+2012-05-05	sandra fluke	44
+2012-05-05	trayvon	146
+2012-05-05	zimmerman	109
+2012-05-06	komen	35
+2012-05-06	planned parenthood	445
+2012-05-06	rush limbaugh	108
+2012-05-06	sandra fluke	29
+2012-05-06	trayvon	107
+2012-05-06	zimmerman	159
+2012-05-07	komen	1
+2012-05-07	planned parenthood	7
+2012-05-07	rush limbaugh	2
+2012-05-07	trayvon	2
+2012-05-07	zimmerman	5
