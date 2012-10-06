@@ -42,7 +42,7 @@ def main():
             ds = ' '.join([d[1], d[2], d[3], d[5] ])
             dt = time.strptime(ds, '%b %d %H:%M:%S %Y')
 
-            date = time.strftime('%Y-%m-%d %H:00:00')
+            date = time.strftime('%Y-%m-%d %H:00:00', dt)
 
             ## turn text into lower case
             text = data['text'].lower()
