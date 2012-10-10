@@ -13,8 +13,8 @@ for line in sys.stdin:
     line = line.strip()
 
     # parse the input we got from mapper.py
-    date, word, count = line.split('\t')
-    key = date + "\t" + word
+    date, count = line.split('\t')
+    key = date
 
     # convert count (currently a string) to int
     try:

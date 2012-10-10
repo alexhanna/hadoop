@@ -1,30 +1,27 @@
 #!/usr/bin/env python
 
-import nltk, json, os, re, string, sys, time
+import json, os, re, string, sys, time
 
 latinList   = []
 unicodeList = []
 
 def loadKeywords():
-    f = open('../data/latinKeywords.txt', 'r')
+    f = open('latinKeywords.txt', 'r')
     for line in f:
         line = line.lower()
         latinList.append( line.strip() )
     f.close()
 
-    if os.path.exists('unicodeKeywords.txt'):
-        f = open('unicodeKeywords.txt', 'r')
-        for line in f:
-            unicodeList.append( line.strip() )
-        f.close()
+    # if os.path.exists('unicodeKeywords.txt'):
+    #     f = open('unicodeKeywords.txt', 'r')
+    #     for line in f:
+    #         unicodeList.append( line.strip() )
+    #     f.close()
 
 def main():
-    loadKeywords()
-    
-    for line in sys.stdin:
-        if len(line) == 0:
-            break
+    loadKeywords()    
 
+    for line in sys.stdin:
         v = line.strip()
 
         data = ''
@@ -42,7 +39,7 @@ def main():
             ds = ' '.join([d[1], d[2], d[3], d[5] ])
             dt = time.strptime(ds, '%b %d %H:%M:%S %Y')
 
-            date = time.strftime('%Y-%m-%d %H:00:00')
+            date = time.strftime('%Y-%m-%d %H:00:00', dt)
 
             ## turn text into lower case
             text = data['text'].lower()
