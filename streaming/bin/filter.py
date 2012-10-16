@@ -3,7 +3,7 @@
 import json, os, re, string, sys, time
 
 latinList   = []
-unicodeList = []
+#unicodeList = []
 
 def loadKeywords():
     f = open('latinKeywords.txt', 'r')
