@@ -57,11 +57,6 @@ public class LzoJsonWordCount extends Configured implements Tool {
     }
 
     public int run(String[] args) throws Exception {
-        if (args.length != 2) {
-            System.out.println("Usage: hadoop jar path/to/this.jar " + getClass() + " <input dir> <output dir>");
-            System.exit(1);
-        }
-
         Job job = new Job(getConf());
         job.setJobName("LZO JSON Word Count");
 

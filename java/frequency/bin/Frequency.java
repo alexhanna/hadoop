@@ -25,11 +25,13 @@ public class Frequency extends Configured implements Tool {
 
         private String mapTaskId;
         private String inputFile;
+        private String mode;
         private int numUsers; 
 
         private long numRecords = 0;
 
-        private HashMap<String, String> users    = new HashMap<String, String>();
+        private HashMap<String, String> users         = new HashMap<String, String>();
+        private HashMap<String, String> userCategory  = new HashMap<String, String>();
         private HashMap<String, Pattern> usersToMatch = new HashMap<String, Pattern>();
 
         private HashMap<String, String> patternsToKey = new HashMap<String, String>();
@@ -41,8 +43,11 @@ public class Frequency extends Configured implements Tool {
         public void configure(JobConf job) {
             mapTaskId = job.get("mapred.task.id");
             inputFile = job.get("map.input.file");
+            mode      = job.get("frequency.mode");
+            
+            String userFile  = job.get("frequency.userFilename");           
+            String catFile   = job.get("frequency.catFilename");
 
-            /*
             if (job.getBoolean("frequency.userFile", true)) {
                 Path[] userFiles = new Path[0];
                 try {
@@ -52,10 +57,28 @@ public class Frequency extends Configured implements Tool {
                 }
                 
                 for (Path f : userFiles) {
-                    parseUserFile(f);
+                    // TK: FIX THIS
+                    //if (f.getName().endsWith( userFile )) {
+                        parseUserFile(f);
+                        //}
                 }           
             }
-
+                        
+            if (job.getBoolean("frequency.catFile", true)) {
+                Path[] userCategories = new Path[0];
+                try {
+                    userCategories = DistributedCache.getLocalCacheFiles(job);
+                } catch (IOException ioe) {
+                    System.err.println("Caught exception while getting cached files: " + StringUtils.stringifyException(ioe));
+                }
+                
+                for (Path f : userCategories) {
+                    if (f.getName().endsWith( catFile )) {
+                        parseCategories(f);
+                    }
+                }           
+            }
+            
             if (job.getBoolean("frequency.patternFile", true)) {
                 Path[] patternFiles = new Path[0];
                 try {
@@ -68,7 +91,7 @@ public class Frequency extends Configured implements Tool {
                     parsePatternFile(f);
                 }
             }
-            */
+            
             
             if (job.getBoolean("frequency.locationFile", true)) {
                 Path[] locationFiles = new Path[0];
@@ -126,15 +149,34 @@ public class Frequency extends Configured implements Tool {
 
                 while ((user = fis.readLine()) != null) {
                     // user file is separated by level
-                    String[] userLevel = user.split("\t");
-                    
-                    users.put(userLevel[0], userLevel[1]);
+                    String[] u = user.split("\t");
+
+                    if(u[0] != "user_id") {
+                        users.put(u[0], u[1]);
+                    }
                 }
             } catch (IOException ioe) {
                 System.err.println("Caught exception while parsing the cached file '" + userFile + "' : " + StringUtils.stringifyException(ioe));
             }
         }
 
+        private void parseCategories(Path catFile) {
+            try {
+                BufferedReader fis = new BufferedReader(new FileReader(catFile.toString()));
+                String user = null;
+
+                while ((user = fis.readLine()) != null) {
+                    // user file is separated by level
+                    String[] u = user.split("\t");
+
+                    if(u[0] != "user_id") {
+                        userCategory.put(u[0], u[1]);
+                    }
+                }
+            } catch (IOException ioe) {
+                System.err.println("Caught exception while parsing the cached file '" + catFile + "' : " + StringUtils.stringifyException(ioe));
+            }
+        }
 
         private void parsePatternFile(Path patternFile) {      
             try {
@@ -171,24 +213,31 @@ public class Frequency extends Configured implements Tool {
             String line = value.toString();
             Vector<String> keyTuple = new Vector<String>(); 
             
-            String[] actions = {
-                "nazl","enzel","\u0646\u0632\u0644","\u0646\u0627\u0632\u0644"                
+            String[] keywords = {
+                "trayvon"
             };
-
+            
+            for (String k : keywords) {
+                patternsToMatch.put(k, Pattern.compile(k, Pattern.CASE_INSENSITIVE));                
+            }
+            
             try {
                 Gson gson = new Gson();
                 HashMap<String, Object> json = gson.fromJson(line, new TypeToken<HashMap<String,Object>>() {}.getType());
-                String created_at = (String) json.get("created_at");
-                String text       = (String) json.get("text");
-                
-                // get the user
-                JsonObject user = (JsonObject) gson.toJsonTree(json.get("user"));
-                String user_id  = ((JsonPrimitive) user.get("id_str")).getAsString();
-                String location = "";
+                String created_at  = (String) json.get("created_at");
+                String text        = (String) json.get("text");
 
-                if (user.get("location") != null) {
-                    location = ((JsonPrimitive) user.get("location")).getAsString();
-                }
+                // get the user
+                JsonObject user = (JsonObject) gson.toJsonTree(json.get("user"));                
+
+                String user_id = ((JsonPrimitive) user.get("id_str")).getAsString();
+                String screen_name = ((JsonPrimitive) user.get("screen_name")).getAsString();
+
+                // String location = "";
+
+                // if (user.get("location") != null) {
+                //     location = ((JsonPrimitive) user.get("location")).getAsString();
+                // }
                 
                 // TK: Somehow stuff is getting into this sample in different ways.
                 // Need to figure out how.
@@ -202,90 +251,129 @@ public class Frequency extends Configured implements Tool {
                 // Turn data from format 
                 // Sat Mar 12 01:49:55 +0000 2011 to 2011-03-12                
                 SimpleDateFormat strptime = new SimpleDateFormat("EEE MMM dd kk:mm:ss ZZZZZ yyyy");
-                SimpleDateFormat strftime = new SimpleDateFormat("yyyy-MM-dd kk:00");
+                SimpleDateFormat strftime = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
 
                 GregorianCalendar gc = new GregorianCalendar();
                 gc.setTime(strptime.parse(created_at, new ParsePosition(0)));
                 
-                // Subtract 4 hours for EDT
-                //gc.add(Calendar.HOUR_OF_DAY, -4);                
-                
                 StringBuffer sf = strftime.format(gc.getTime(),
                                                   new StringBuffer(),
                                                   new FieldPosition(0));
-                keyTuple.add(sf.toString());
+                String userLevel = users.get( user_id );  
+                
+                if (mode.equals("volume")) {
+                    word.set( sf.toString() );
+                    output.collect(word, one);
+                } else if (mode.equals("getTweets")) {
+                    if (userLevel != null && userLevel.equals("1")) {
+                        for( String k : patternsToMatch.keySet() ) {                                
+                            if (patternsToMatch.get(k).matcher(text).find()) {
+                                keyTuple.add( sf.toString() );
+                                keyTuple.add( screen_name );
+                                //keyTuple.add( userCategory.get(user_id) );                               
+                                keyTuple.add( text );
+                                
+                                word.set( join(keyTuple, "\t") );
+                                output.collect(word, one);
+                            } 
+                        }
+                    } 
+                } else if (mode.equals("rtCategorize")) {
+                    // get the retweet                    
+                    if (json.get("retweeted_status") != null) {
+                        JsonObject rt = (JsonObject) gson.toJsonTree(json.get("retweeted_status"));
+                    
+                        // get RT'd user
+                        JsonObject rtUser = (JsonObject) gson.toJsonTree(rt.get("user"));
+                        String rtUserId = null;
+                        if (rtUser.get("id_str") != null) {
+                            rtUserId  = ((JsonPrimitive) rtUser.get("id_str")).getAsString();
+                        }
+                        String rtUserLevel = users.get( rtUserId );
+                        
+                        if (userLevel != null && userLevel.equals("1")) {
+                            // add first category
+                            keyTuple.add( userCategory.get( user_id ) );
 
-
-                // looking for location in text
-                // for( String s : locationsOrder ) {
-                //     Vector<Pattern> v = locationsToMatch.get(s); 
-                //     for (Pattern p : v) {
-                //         if (p.matcher(text).find()) {
-                //             keyTuple.add( s );
-                            
-                //             word.set( join(keyTuple, "\t") );
-                //             output.collect(word, one);
-
-                //             // reset the tuple
-                //             keyTuple = new Vector<String>();
-                //             keyTuple.add( sf.toString() );
-                //         }
-                //     }
-                // }
-
-                // for parsing peoples' location
-                // and seeing if they are acting
-                outer:
-                for( String s : locationsOrder ) {
-                    Vector<Pattern> v = locationsToMatch.get(s); 
-                    for (Pattern p : v) {
-                        // first check if they are in Egypt
-                        if (p.matcher(location).find()) {
-                            for (String nazl : actions) {                            
-                                // if they have some "nazl" in their text, mark it
-                                Pattern p_nazl = Pattern.compile(nazl, Pattern.CASE_INSENSITIVE);
-                                if (p_nazl.matcher(text).find()) {  
-                                    word.set( join(keyTuple, "\t") );
-                                    output.collect(word, one);
-                                    
-                                    break outer;
+                            if (rtUserLevel != null) { 
+                                if (rtUserLevel.equals("1")) {
+                                    keyTuple.add( userCategory.get( rtUserId ) );
+                                } else if (rtUserLevel.equals("2")) {
+                                    keyTuple.add( "level2" );
                                 }
+                            } else {
+                                keyTuple.add( "other" );
                             }
+                            
+                            word.set( join(keyTuple, "\t") );
+                            output.collect(word, one);
                         }
                     }
+                } else if (mode.equals("userlevelVolume")) {
+                    if (userLevel != null) {
+                        keyTuple.add( sf.toString() );
+                        keyTuple.add( userLevel );
+
+                        word.set( join(keyTuple, "\t") );
+                        output.collect(word, one);
+                    }
+                } else if (mode.equals("keywordLevel")) {                
+                    // check if word is in tweet
+                    for( String k : patternsToMatch.keySet() ) {                                
+                        if (userLevel != null) {
+                            if (patternsToMatch.get(k).matcher(text).find()) {                                                
+                                //   if(reply_id != null) {
+                                //    userLevel = users.get( reply_id );
+                                // }                       
+
+                                word.set( sf.toString() + "\t" + userLevel + "\t" + k );
+                                output.collect(word, one);                        
+                            }
+                        } 
+                    }                
+                } else if (mode.equals("location")) {
+
+                    // looking for location in text
+                    // for( String s : locationsOrder ) {
+                    //     Vector<Pattern> v = locationsToMatch.get(s); 
+                    //     for (Pattern p : v) {
+                    //         if (p.matcher(text).find()) {
+                    //             keyTuple.add( s );
+                            
+                    //             word.set( join(keyTuple, "\t") );
+                    //             output.collect(word, one);
+
+                    //             // reset the tuple
+                    //             keyTuple = new Vector<String>();
+                    //             keyTuple.add( sf.toString() );
+                    //         }
+                    //     }
+                    // }
+
+                    // for parsing peoples' location
+                    // and seeing if they are acting
+                    // outer:
+                    // for( String s : locationsOrder ) {
+                    //     Vector<Pattern> v = locationsToMatch.get(s); 
+                    //     for (Pattern p : v) {
+                    //         // first check if they are in Egypt
+                    //         if (p.matcher(location).find()) {
+                    //             for (String nazl : actions) {                            
+                    //                 // if they have some "nazl" in their text, mark it
+                    //                 Pattern p_nazl = Pattern.compile(nazl, Pattern.CASE_INSENSITIVE);
+                    //                 if (p_nazl.matcher(text).find()) {  
+                    //                     word.set( join(keyTuple, "\t") );
+                    //                     output.collect(word, one);
+                                    
+                    //                     break outer;
+                    //                 }
+                    //             }
+                    //         }
+                    //     }
+                    // }
+
                 }
 
-                //keyTuple.add(users.get( user_id ));
-                //word.set( join(keyTuple, "\t") );
-                //output.collect(word, one);
-                
-                // check if word is in tweet
-
-                // for( String k : patternsToMatch.keySet() ) {
-                //     if (toMatch.get(k).matcher(text).find()) {
-                        
-                //         // see if we are collecting on users                        
-                //         String userLevel = users.get( user_id );
-                //         // if (userLevel == null) {
-                //         //     if(reply_id != null) {
-                //         //         userLevel = users.get( reply_id );
-                //         //     }
-                //         // }
-
-                //         keyTuple.add( userLevel );                        
-                //         keyTuple.add( k );
-                            
-                //         // make one big key
-                //         word.set( join(keyTuple, "\t") );
-                //         output.collect(word, one);                        
-                            
-                //         // reset the tuple
-                //         keyTuple = new Vector<String>();
-                //         keyTuple.add( sf.toString() );
-                            
-                //     } 
-                // }                
-                
                 reporter.incrCounter(Counters.NUM_RECORDS, 1);
                 if(++numRecords % 100 == 0) {
                     reporter.setStatus(mapTaskId + " processed " + numRecords + " from input-file: " + inputFile); 
@@ -312,6 +400,7 @@ public class Frequency extends Configured implements Tool {
         job.setJobName("frequency");
         job.setBoolean("frequency.patternFile", false);
         job.setBoolean("frequency.userFile", false);
+        job.setBoolean("frequency.catFile", false);
         job.setBoolean("frequency.locationFile", false);
  
         job.setOutputKeyClass(Text.class);
@@ -326,9 +415,18 @@ public class Frequency extends Configured implements Tool {
         
         List<String> other_args = new ArrayList<String>();
         for (int i=0; i < args.length; ++i) {
-            if ("-userFiles".equals(args[i])) {
-                DistributedCache.addCacheFile(new Path(args[++i]).toUri(), job);
+            if ("-mode".equals(args[i])) {
+                job.set("frequency.mode", args[++i]);
+            } else if ("-userFile".equals(args[i])) {
+                String userFile = args[++i];
+                DistributedCache.addCacheFile(new Path(userFile).toUri(), job);
                 job.setBoolean("frequency.userFile", true);
+                job.set("frequency.userFilename", userFile);
+            } else if ("-catFile".equals(args[i])) {
+                String catFile = args[++i];
+                DistributedCache.addCacheFile(new Path(catFile).toUri(), job);
+                job.setBoolean("frequency.catFile", true);
+                job.set("frequency.catFilename", catFile);
             } else if ("-patternFiles".equals(args[i])) {
                 DistributedCache.addCacheFile(new Path(args[++i]).toUri(), job);
                 job.setBoolean("frequency.patternFile", true);
