@@ -4,24 +4,33 @@ from __future__ import division
 import json, string, sys, time
 
 sentimentDict = {
-    'positive': [],
-    'negative': []
+    'positive': {},
+    'negative': {}
 }
 
 
 def loadSentiment():
     f = open('../data/carenPos.txt', 'r')
     for line in f:
-        sentimentDict['positive'].append(line.strip())
+        sentimentDict['positive'][line.strip()] = 1
     f.close()
 
     f = open('../data/carenNeg.txt', 'r')
     for line in f:
-        sentimentDict['negative'].append(line.strip())
+        sentimentDict['negative'][line.strip()] = 1
     f.close()
+
+def rep(n, x):
+    s = ''
+    for i in range(0, n):
+        s += x
+
+    return s
 
 def main():
     loadSentiment()
+
+    trans = rep(len(string.punctuation), ' ')
     
     for line in sys.stdin:
         line = line.strip()
@@ -42,19 +51,18 @@ def main():
 
             date = time.strftime('%Y-%m-%d %H:%M:00', dt)
 
-            msg = data['text']
-
             ## turn text into lower case
-            text   = msg.lower()
+            text = data['text'].lower()
 
             ## encode in UTF-8 to get rid of Unicode errors
-            #text   = text.encode('utf-8')
-            #text   = text.translate( string.maketrans("",""), string.punctuation )
+            text   = text.encode('utf-8')
+            text   = text.translate( string.maketrans(string.punctuation, trans) )
 
-            for p in list(string.punctuation):                                
-                text = text.replace(p, ' ')
-
-            words  = text.split(' ')
+            words = {}
+            for w in text.split(' '): 
+                if len(w) > 0:
+                    words[ w ] = 1
+                    
             lwords = len(words)
 
             counts = {
