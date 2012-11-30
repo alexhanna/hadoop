@@ -10,12 +10,12 @@ sentimentDict = {
 
 
 def loadSentiment():
-    f = open('../data/carenPos.txt', 'r')
+    f = open('carenPos.txt', 'r')
     for line in f:
         sentimentDict['positive'][line.strip()] = 1
     f.close()
 
-    f = open('../data/carenNeg.txt', 'r')
+    f = open('carenNeg.txt', 'r')
     for line in f:
         sentimentDict['negative'][line.strip()] = 1
     f.close()
@@ -49,7 +49,7 @@ def main():
             ds = ' '.join([d[1], d[2], d[3], d[5] ])
             dt = time.strptime(ds, '%b %d %H:%M:%S %Y')
 
-            date = time.strftime('%Y-%m-%d %H:%M:00', dt)
+            date = time.strftime('%Y-%m-%d %H:00:00', dt)
 
             ## turn text into lower case
             text = data['text'].lower()
@@ -86,5 +86,6 @@ def main():
 
                     ## calculate overall sentiment by subtracting one from another 
                     print "\t".join([date, c, str(ratios['positive'] - ratios['negative'])])                              
+
 if __name__ == '__main__':
     main()
