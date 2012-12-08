@@ -251,7 +251,7 @@ public class Frequency extends Configured implements Tool {
                 // Turn data from format 
                 // Sat Mar 12 01:49:55 +0000 2011 to 2011-03-12                
                 SimpleDateFormat strptime = new SimpleDateFormat("EEE MMM dd kk:mm:ss ZZZZZ yyyy");
-                SimpleDateFormat strftime = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
+                SimpleDateFormat strftime = new SimpleDateFormat("yyyy-MM-dd kk:mm:00");
 
                 GregorianCalendar gc = new GregorianCalendar();
                 gc.setTime(strptime.parse(created_at, new ParsePosition(0)));
