@@ -14,15 +14,15 @@ def validate( x ):
         return "0"
 
 def main():
-    levels = {}
+    #    levels = {}
 
     ## open file for current round
-    f = open('follow-r3.txt', 'r')
-    for line in f:
-        line = line.strip()
-        (user, level) = string.split(line, "\t")
+    #f = open('follow-r3.txt', 'r')
+    #for line in f:
+    #    line = line.strip()
+    #    (user, level) = string.split(line, "\t")
 
-        levels[user] = level
+    #   levels[user] = level
 
     for line in sys.stdin:
 	line = line.strip()
@@ -38,32 +38,32 @@ def main():
             uid  = user['id_str']
             
             ## get second level tweets
-            if uid in levels and levels[uid] == '2':
+            # if uid in levels and levels[uid] == '2':
                 # Parse date
-                d  = string.split( data['created_at'], ' ')
-                ds = ' '.join([d[1], d[2], d[3], d[5] ])
-                dt = time.strptime(ds, '%b %d %H:%M:%S %Y')
+            d  = string.split( data['created_at'], ' ')
+            ds = ' '.join([d[1], d[2], d[3], d[5] ])
+            dt = time.strptime(ds, '%b %d %H:%M:%S %Y')
 
-                date = time.strftime('%Y-%m-%d %H:%M:%S', dt)
+            date = time.strftime('%Y-%m-%d %H:%M:%S', dt)
 
-                rt = ''
-                if 'retweeted_status' in data:
-                    rt = data['retweeted_status']['text']
+            rt = ''
+            if 'retweeted_status' in data:
+                rt = data['retweeted_status']['text']
 
-                ## items to print
-                toPrint = [
-                    data['id'],
-                    date,
-                    user['name'],
-                    user['screen_name'],
-                    user['followers_count'],
-                    user['friends_count'],
-                    user['statuses_count'],
-                    data['text'],
-                    rt
-                    ]
-                
-                print "\t".join( map(validate, toPrint) )
+            ## items to print
+            toPrint = [
+                data['id'],
+                date,
+                user['name'],
+                user['screen_name'],
+                user['followers_count'],
+                user['friends_count'],
+                user['statuses_count'],
+                data['text'],
+                rt
+                ]
+
+            print "\t".join( map(validate, toPrint) )
                 
 if __name__ == '__main__':
     main()
