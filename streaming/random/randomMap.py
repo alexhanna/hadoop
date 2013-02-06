@@ -13,6 +13,19 @@ def validate( x ):
     else:
         return "0"
 
+def loadUsers(wave):
+    f = open('follow-r' + wave + '.txt', 'r')
+    for line in f:
+        line = line.lower().strip()
+        (user_id, level) = line.split("\t")
+
+        if user_id == 'user_id':
+            continue
+        
+        users[ user_id ] = level 
+    f.close()
+
+
 def main():
     #    levels = {}
 

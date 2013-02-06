@@ -1,6 +1,6 @@
-hadoop dfs -rmr output
+hdfs dfs -rm -r output
 
-hadoop jar /usr/lib/hadoop/contrib/streaming/hadoop-streaming-0.20.2-cdh3u5.jar \
+hadoop jar /usr/lib/hadoop-mapreduce/hadoop-streaming.jar \
     -D stream.map.output.field.separator="\t" \
     -D stream.num.map.output.key.fields=1 \
     -D mapred.text.key.partitioner.options=-k1,1 \

@@ -1,7 +1,8 @@
-#!/usr/bin/env python
-
+#!/usr/local/bin/python2.7
+#
 ## adapted from Michael Noll's MapReduce in Python tutorial
 ## http://www.michael-noll.com/tutorials/writing-an-hadoop-mapreduce-program-in-python/
+#
 
 from operator import itemgetter
 import sys
@@ -14,6 +15,7 @@ def main():
     c_key   = None
     c_count = 0
     nkey    = int(sys.argv[1])
+    #key     = None
 
     # input comes from STDIN
     for line in sys.stdin:
