@@ -2,7 +2,7 @@
 #
 # countMapper.py
 # This script gets counts of tweets based on user levels and keywords
-# Output is the specified keys and a number
+# Output is the specified keys and aggregated counts
 # 
 
 import argparse, json, os, re, string, sys, time
@@ -28,8 +28,8 @@ def validate( x ):
     else:
         return "0"
 
-def loadUsers(wave):
-    f = open('follow-r' + str(wave) + '.txt', 'r')
+def loadUsers(levelFile):
+    f = open(levelFile, 'r')
     for line in f:
         line = line.lower().strip()
         (user_id, level) = line.split("\t")
@@ -57,18 +57,20 @@ def main():
         are set in the options. The reducer is usually a simple sum function.""")
     parser.add_argument('-d', '--date', choices = ['day','hour','minute'], 
         help = "Grouping by datetime. You can group by day, hour, or minute.")
+    parser.add_argument('-g', '--geo', action = "store_true", 
+        help = "Grouping by geolocation. Rounding to the first decimal point.")
     parser.add_argument('-k', '--keywordFile', default = None, 
         help = "Path of keyword file. If you are trying to group by particular keywords, note the ones you would like to use.")
-    parser.add_argument('--userLevels', choices = ['1', '2', '3' ,'all'], default = None)
-    parser.add_argument('--wave', default = None)
+    parser.add_argument('-l','--level', choices = ['1', '2', '3' ,'all'])
+    parser.add_argument('--levelFile', default = "follow-r3.txt")
 
     args = parser.parse_args()
 
     if args.keywordFile:
         loadKeywords( args.keywordFile )
 
-    if args.userLevels == 'all':
-        loadUsers(args.wave)
+    if args.level:
+        loadUsers(args.levelFile)
 
     for line in sys.stdin:
         line = line.strip()
@@ -81,7 +83,6 @@ def main():
         if 'text' in data:
             user    = data['user']            
             uid     = None
-            sid     = None
             toPrint = []
             
             # Parse data in the format of Sat Mar 12 01:49:55 +0000 2011                
@@ -99,47 +100,45 @@ def main():
 
             toPrint.append(date)
 
-            if 'id_str' in data:
-                sid = data['id_str']
-            else:
-                sid = str(data['id'])
-
             if 'id_str' in user:
                 uid = user['id_str']
             else:
                 uid = str(user['id'])
 
-            text = data['text']
+            if args.level:
+                if uid in users and (args.level == 'all' or users[uid] == args.level):
+                    toPrint.append(users[uid])
+                else:
+                    continue
 
-            ## turn text into lower case
-            rt      = None
-            rt_user = None
-            rt_sn   = None
+            if args.geo:
+                if data['coordinates']:
+                    coords = data['coordinates']['coordinates']
 
-            if 'retweeted_status' in data:
-                rt = data['retweeted_status']['text']
+                    ## reversing so it is latitude, then longitude
+                    coordStr = ",".join([
+                        str(round(coords[1], 1)),
+                        str(round(coords[0], 1))
+                        ])
 
-                if 'user' in data['retweeted_status']:
-                    rt_user = data['retweeted_status']['user']['name']
-                    rt_sn   = data['retweeted_status']['user']['screen_name']
-
-            if args.userLevels == 'all' or (uid in users and users[uid] in args.userLevels):
-                toPrint.append(users[uid])
+                    toPrint.append(coordStr)
+                else:
+                    toPrint.append('0')
 
             ## for keywords, need to handle this a little different because we want this to
             ## print every time there is an instance of the word
             if args.keywordFile:
-                testText = ''
+                text = ''
                 ## turn text into lower case            
                 if 'retweeted_status' in data:
-                    testText = data['retweeted_status']['text'].lower()
+                    text = data['retweeted_status']['text'].lower()
                 else:
-                    testText = data['text'].lower()
+                    text = data['text'].lower()
         
-                testText = testText.encode('utf-8')
-                testText = testText.translate( string.maketrans(punc, trans) )
+                text = text.encode('utf-8')
+                text = text.translate( string.maketrans(punc, trans) )
 
-                words = testText.split()
+                words = text.split()
 
                 ## copy the array for each word that appears
                 toPrintCopy = list(toPrint)
