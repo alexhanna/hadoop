@@ -12,7 +12,7 @@ def main():
         count += 1
                 
         ## take every tenth tweet
-        if count % 1000 == 0:
+        if count % 100 == 0:
             print line
 
 if __name__ == '__main__':

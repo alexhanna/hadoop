@@ -95,7 +95,7 @@ def main():
         if 'text' in data:
             uid  = None
             sid  = None
-            printThis = False
+            printThis = True
             
             retweet = data.get('retweeted_status', None)
 
@@ -110,14 +110,16 @@ def main():
                 uid = str(data['user']['id'])
 
             if args.all:
-                printThis = True
+                printThis = True                
             else:
                 if args.level:
                     if uid in users and (args.level == 'all' or users[uid] == args.level):
-                        printThis = True
+                        printThis = printThis and True
+                    else:
+                        printThis = printThis and False
 
                 if args.keywordFile:
-                    printThis = False
+                    printWord = False
                     text = ''
 
                     if retweet:
@@ -126,14 +128,13 @@ def main():
                         text = data['text'].lower()
             
                     text = text.encode('utf-8')
-                    text = text.translate( string.maketrans(punc, trans) )
 
-                    words = text.split()
-            
                     for w in wordList:
-                        if w in words:
-                            printThis = True
+                        if w in text:
+                            printWord = True
                             break
+
+                    printThis = printThis and printWord
 
             ## Print if all the prior conditions have been met
             if printThis:

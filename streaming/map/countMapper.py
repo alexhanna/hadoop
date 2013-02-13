@@ -135,15 +135,13 @@ def main():
                 else:
                     text = data['text'].lower()
         
+                ## encode text for unicode keywords
                 text = text.encode('utf-8')
-                text = text.translate( string.maketrans(punc, trans) )
-
-                words = text.split()
 
                 ## copy the array for each word that appears
                 toPrintCopy = list(toPrint)
                 for w in wordList:
-                    if w in words:
+                    if w in text:
                         toPrintCopy.append(w)
                         toPrintCopy.append('1')
 
