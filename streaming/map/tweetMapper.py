@@ -29,6 +29,7 @@ def validate( x ):
         if type(x) == unicode:
             x = string.replace(x, "\n", " ")
             x = string.replace(x, "\r", " ")
+            x = string.replace(x, "\t", " ")
             return x.encode('utf-8')
         else:
             return str(x)
@@ -64,7 +65,7 @@ def main():
         so the reducer will probably just be an Identity function.""")
     parser.add_argument('-a', '--all', action = "store_true", help = "Print out all tweets, no constraints")
     parser.add_argument('-k', '--keywordFile', default = None,
-        help = "Path of keyword file. If you are trying to group by particular keywords, note the ones you would like to use.")
+        help = "Path of keyword file. Use this to enable keyword matching.")
     parser.add_argument('-l','--level', choices = ['1', '2', '3' ,'all'])
     parser.add_argument('--levelFile', default = "follow-r3.txt")
     parser.add_argument('-r', '--retweet', action = "store_true", 
@@ -72,7 +73,9 @@ def main():
     parser.add_argument('-t', '--tweetDetail', choices = ['low', 'medium', 'high'], default = 'low',
         help = """The level of detail in output. 'basic' includes status_id, timestamp, text, and basic user information.
         'moderate' includes more information, including user geolocation, user location, and user URL.
-        'all' includes all available information in the tweet.""")
+        'high' includes the most available information in the tweet.""")
+    parser.add_argument('--hashtag', action = "store_true",
+        help = "Instead of text, this outputs the hashtags.")
     parser.add_argument('-o', '--output', default="tab", choices = ['tab', 'JSON'],
         help = "Output format for the tweet.")
 
@@ -170,10 +173,16 @@ def main():
                         elif e['geo']:
                             coords = ",".join( map(str, e['geo']['coordinates']) )
 
-                        ## remove tabs and newlines from text
-                        e['text'] = e['text'].encode('utf-8')
-                        e['text'] = e['text'].translate( string.maketrans( '\t\n\r', '   ') )
-                        e['text'] = e['text'].decode('utf-8')
+                        if args.hashtag:
+                            if len(e['entities']['hashtags']):
+                                e['text'] = " ".join( map(lambda x: x['text'], e['entities']['hashtags']) )
+                            else:
+                                e['text'] = ""
+                        else:
+                            ## remove tabs and newlines from text
+                            e['text'] = e['text'].encode('utf-8')
+                            e['text'] = e['text'].translate( string.maketrans( '\t\n\r', '   ') )
+                            e['text'] = e['text'].decode('utf-8')                        
 
                         ## print rather basic stuff
                         if args.tweetDetail == 'low':
