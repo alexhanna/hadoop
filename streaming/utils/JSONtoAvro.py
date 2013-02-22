@@ -3,9 +3,14 @@ import json, sys
 from types import *
 
 def main():
-	s = schema.parse(open("tweet.avsc").read())
+	if len(sys.argv) < 2:
+		print "Usage: cat input.json | python2.7 JSONtoAvro.py output"
+		return
 
-	writer = datafile.DataFileWriter(sys.stdout, io.DatumWriter(), s, codec = 'deflate')
+	s = schema.parse(open("tweet.avsc").read())
+	f = open(sys.argv[1], 'wb')
+
+	writer = datafile.DataFileWriter(f, io.DatumWriter(), s, codec = 'deflate')
 
 	failed = 0
 
@@ -20,12 +25,12 @@ def main():
 		try:
 			writer.append(data)
 		except io.AvroTypeException as detail:
-			sys.stderr.write(line + "\n")
+			print line
 			failed += 1
 
-	#writer.close()
+	writer.close()
 
-	sys.stderr.write(str(failed) + " failed\n")
+	print str(failed) + " failed"
 
 if __name__ == '__main__':
 	main()

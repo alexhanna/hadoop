@@ -278,7 +278,7 @@
 					{"name": "profile_use_background_image", "type": "boolean"},
 					{"name": "protected", "type": "boolean"},
 					{"name": "screen_name", "type" : "string"},
-					{"name": "show_all_inline_media", "type": "boolean"},
+					{"name": "show_all_inline_media", "type": ["null", "boolean"]},
 					{"name": "statuses_count", "type": "int"},
 					{"name": "time_zone", "type": ["null", "string"]},
 					{"name": "url", "type": ["null", "string"]},

@@ -85,7 +85,7 @@ def main():
         loadKeywords( args.keywordFile )
 
     if args.level:
-        loadUsers(args.levelFile)
+        loadUsers(args.levelFile)    
 
     for line in sys.stdin:
         line = line.strip()
