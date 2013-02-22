@@ -1,0 +1,311 @@
+{
+	"type"      : "record",
+	"name"      : "Tweet",
+	"namespace" : "org.ahanna",
+	"fields" : [
+		{
+			"name": "contributors", 
+			"type" : ["null", {
+				"type" : "array", 
+				"items": [{
+					"type"      : "record",
+					"name"      : "Contributor",
+					"namespace" : "org.ahanna",
+					"fields"    : [
+						{"name": "id", "type" : "long" },
+						{"name": "id_str", "type" : "string"},
+						{"name": "screen_name", "type" : "string"}
+					]
+				}, "long"]
+			}] 
+		},
+		{
+			"name": "coordinates",  
+			"type" : ["null", 
+			{
+				"type"      : "record",
+				"name"      : "Coordinate",
+				"namespace" : "org.ahanna",
+				"fields"    : [
+					{"name" : "coordinates", "type": 
+						{"type" : "array", "items" : "float"} },
+					{"name" : "type", "type" : "string"}
+				]
+			}]
+		},
+		{
+			"name"      : "entities",
+			"type"      : {
+				"name"      : "EntityGroup",
+				"type"      : "record",
+				"namespace" : "org.ahanna",
+				"fields"    : [
+					{
+						"name" : "media",
+						"type" : ["null", {
+							"type"          : "array",
+							"items"         : {
+								"name"      : "InnerMedia",
+								"type"      : "record",
+								"namespace" : "org.ahanna",
+								"fields"    : [
+									{"name" : "type", "type" : "string"},
+									{"name" : "id", "type": "long"},
+									{"name" : "id_str", "type" : "string"},
+									{"name" : "indices", "type": { "type": "array", "items": "int" }},
+									{"name" : "url", "type" : "string"},
+									{"name" : "expanded_url", "type" : "string"},
+									{"name" : "display_url", "type"  : "string"},
+									{"name" : "media_url", "type" : "string"},
+									{"name" : "media_url_https", "type"  : "string"},
+									{"name" : "source_status_id", "type" : ["null", "long"]},
+									{"name" : "source_status_id_str", "type" : ["null", "string"]},
+									{
+										"name": "sizes",
+										"type": {
+											"name": "InnerSizes",
+											"type": "record",
+											"fields": [
+												{
+													"name": "thumb",
+													"type": {
+														"name": "InnerThumb",
+														"type": "record",
+														"fields": [
+															{"name":"resize", "type":"string"},
+															{"name":"h", "type":"int"},
+															{"name":"w", "type":"int"}
+														]
+													}
+												},
+												{
+													"name": "large",
+													"type": {
+														"name": "InnerLarge",
+														"type": "record",
+														"fields": [
+															{"name":"resize", "type":"string"},
+															{"name":"h", "type":"int"},
+															{"name":"w", "type":"int"}
+														]
+													}
+												},
+												{
+													"name": "medium",
+													"type": {
+														"name": "InnerMedium",
+														"type": "record",
+														"fields": [
+															{"name":"resize", "type":"string"},
+															{"name":"h", "type":"int"},
+															{"name":"w", "type":"int"}
+														]
+													}
+												},
+												{
+													"name": "small",
+													"type": {
+														"name": "InnerSmall",
+														"type": "record",
+														"fields": [
+															{"name":"resize", "type":"string"},
+															{"name":"h", "type":"int"},
+															{"name":"w", "type":"int"}
+														]
+													}
+												}																													
+											]
+										}
+									}
+								]
+							}
+						}]
+					},
+					{
+						"name" : "hashtags",
+						"type" : {
+							"type"          : "array",
+							"items"         : {
+								"name"      : "hashtag",
+								"type"      : "record",
+								"namespace" : "org.ahanna",
+								"fields"    : [
+									{"name" : "indices", "type": { "type": "array", "items": "int" }},
+									{"name" : "text", "type" : "string"}
+								]
+							}
+						}
+					},
+					{
+						"name" : "urls",
+						"type" : {
+							"type"          : "array",
+							"items"         : {
+								"name"      : "url",
+								"type"      : "record",
+								"namespace" : "org.ahanna",
+								"fields"    : [
+									{"name" : "indices", "type": { "type": "array", "items": "int" }},
+									{"name" : "url", "type" : "string"},
+									{"name" : "display_url",  "type" : ["null", "string"]},
+									{"name" : "expanded_url", "type" : ["null", "string"]}
+								]
+							}
+						}
+					},
+					{
+						"name" : "user_mentions",
+						"type" : {
+							"type"  : "array",
+							"items" : {
+								"name"      : "user_mention",
+								"type"      : "record",
+								"namespace" : "org.ahanna",
+								"fields"    : [
+									{"name" : "indices", "type": { "type": "array", "items": "int" }},
+									{"name" : "name", "type" : "string"},
+									{"name" : "screen_name", "type" : "string"},
+									{"name" : "id", "type" : "long"},
+									{"name" : "id_str", "type" : "string"}
+								]
+							}
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "geo",
+			"type" : ["null", {
+					"name"      : "InnerGeo",
+					"namespace" : "org.ahanna",
+					"type"      : "record",
+					"fields"    : [
+						{"name":"type", "type":"string"},
+						{
+							"name":"coordinates",
+							"type": {
+								"type": "array",
+								"items": "float"
+							}
+						}
+					]
+				}]
+		},
+		{
+			"name"       : "place",
+			"type"	     : ["null", {
+				"name"      : "InnerPlace",
+				"type"      : "record",
+				"namespace" : "org.ahanna",
+				"fields"    : [
+					{"name": "country", "type": "string"},
+					{"name": "country_code", "type": "string"},
+					{"name": "full_name", "type": "string"},
+					{"name": "name", "type": "string"},
+					{"name": "id", "type": "string"},
+					{"name": "place_type", "type": "string"},
+					{"name": "url", "type": "string"},
+					{"name": "attributes", "type": ["null", 
+						{
+							"type": "map", "values": "string"	
+						}]
+					},
+					{
+						"name": "bounding_box", 
+						"type": ["null", {
+							"namespace": "org.ahanna",
+							"name"     : "BBox",
+							"type"     : "record",
+							"fields"   : [
+								{"name":"type", "type":"string"},
+								{	
+									"name": "coordinates",
+									"type": {
+										"type": "array",
+										"items": {
+											"type": "array",
+											"items": {
+												"type": "array",
+												"items": "float"
+											}
+										}
+									}
+								}
+							]
+						}]
+					}
+				]
+			}]
+		},
+		{
+			"name"       : "user",
+			"type"       : {
+				"name"      : "InnerUser",
+				"type"      : "record",
+				"namespace" : "org.ahanna",
+				"fields"   : [
+					{"name": "contributors_enabled", "type" : "boolean"},
+					{"name": "created_at", "type": "string"},
+					{"name": "default_profile", "type": "boolean"},
+					{"name": "default_profile_image", "type": "boolean"},
+					{"name": "description", "type": ["null", "string"]},
+					{"name": "favourites_count", "type": "int"},
+					{"name": "follow_request_sent", "type": ["null", "boolean"]},
+					{"name": "following", "type": ["null", "boolean"]},
+					{"name": "followers_count", "type": "int"},
+					{"name": "friends_count", "type": "int"},
+					{"name": "geo_enabled", "type": "boolean"},
+					{"name": "id", "type" : "long" },
+					{"name": "id_str", "type" : "string"},
+					{"name": "is_translator", "type": "boolean"},
+					{"name": "lang", "type": "string"},
+					{"name": "listed_count", "type" : "int"},
+					{"name": "location", "type" : ["null", "string"]},
+					{"name": "name", "type" : "string"},
+					{"name": "notifications", "type" : ["null", "boolean"]},
+					{"name": "profile_background_color", "type": "string"},
+					{"name": "profile_background_image_url", "type": "string"},
+					{"name": "profile_background_image_url_https", "type": "string"},
+					{"name": "profile_background_tile", "type": "boolean"},
+					{"name": "profile_banner_url", "type": ["null", "string"]},
+					{"name": "profile_image_url", "type": "string"},
+					{"name": "profile_image_url_https", "type": "string"},
+					{"name": "profile_link_color", "type": "string"},
+					{"name": "profile_sidebar_border_color", "type": "string"},
+					{"name": "profile_sidebar_fill_color", "type": "string"},
+					{"name": "profile_text_color", "type": "string"},
+					{"name": "profile_use_background_image", "type": "boolean"},
+					{"name": "protected", "type": "boolean"},
+					{"name": "screen_name", "type" : "string"},
+					{"name": "show_all_inline_media", "type": "boolean"},
+					{"name": "statuses_count", "type": "int"},
+					{"name": "time_zone", "type": ["null", "string"]},
+					{"name": "url", "type": ["null", "string"]},
+					{"name": "utc_offset", "type": ["null", "int"]},
+					{"name": "verified", "type": "boolean"}
+				]
+			}
+		},
+		{"name": "created_at",                  "type" : "string" },
+		{"name": "favorited",                   "type" : "boolean" },		
+		{"name": "id",                          "type" : "long"},
+		{"name": "id_str",                      "type" : "string"},
+		{"name": "in_reply_to_screen_name",     "type" : ["string","null"] },
+		{"name": "in_reply_to_status_id",       "type" : ["long",  "null"] },
+		{"name": "in_reply_to_status_id_str",   "type" : ["string", "null"] },
+		{"name": "in_reply_to_user_id",         "type" : ["long", "null"] },
+		{"name": "in_reply_to_user_id_str",     "type" : ["string", "null"] },
+		{"name": "possibly_sensitive",          "type" : ["boolean", "null"] },
+		{"name": "possibly_sensitive_editable", "type" : ["boolean", "null"] },
+		{"name": "retweeted",                   "type" : ["boolean", "null"] },
+		{"name": "retweet_count",               "type" : ["int", "null"] },
+		{"name": "retweeted_status",            "type" : ["Tweet", "null"] },
+		{"name": "source",                      "type" : "string"},
+		{"name": "text",                        "type" : "string"},
+		{"name": "truncated",                   "type" : "boolean"},
+		{"name": "withheld_copyright",          "type" : ["null", "boolean"]},
+		{"name": "withheld_in_countries",       "type" : ["null", {"type": "array", "items" : "string"}]},
+		{"name": "withheld_scope",              "type" : ["null", "string"]}
+	]
+}
