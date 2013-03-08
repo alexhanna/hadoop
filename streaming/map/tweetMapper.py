@@ -10,19 +10,19 @@ import argparse, json, os, re, string, sys, time
 users    = {}
 wordList = []
 
-def rep(n, x):
-    s = ''
-    for i in range(0, n):
-        s += x
-
-    return s
-
 def formatDate(dateString):
     # Parse data in the format of Sat Mar 12 01:49:55 +0000 2011
     d  = string.split( dateString, ' ')
     ds = ' '.join([d[1], d[2], d[3], d[5] ])
     dt = time.strptime(ds, '%b %d %H:%M:%S %Y')
     return time.strftime('%Y-%m-%d %H:%M:%S', dt)
+
+def rep(n, x):
+    s = ''
+    for i in range(0, n):
+        s += x
+
+    return s
 
 def validate( x ):
     if x:
@@ -76,10 +76,14 @@ def main():
         'high' includes the most available information in the tweet.""")
     parser.add_argument('--hashtag', action = "store_true",
         help = "Instead of text, this outputs the hashtags.")
-    parser.add_argument('-o', '--output', default="tab", choices = ['tab', 'JSON'],
+    parser.add_argument('-o', '--output', default="tab", choices = ['tab', 'json'],
         help = "Output format for the tweet.")
+    parser.add_argument('--minUserFollowers', type = int,
+        help = "Minimum number of followers that the user should have.")
+    parser.add_argument('--minUserTweets', type = int,
+        help = "Minimum number of tweets that the user should have.")
 
-    args = parser.parse_args()
+    args  = parser.parse_args()
 
     if args.keywordFile:
         loadKeywords( args.keywordFile )
@@ -93,9 +97,18 @@ def main():
         try:
             data = json.loads(line)
         except ValueError as detail:
+            ## print the line when it messes up, but clean it up first
+            #line = line.translate( string.maketrans( '\t\n\r', '   ') )
+            #print "11111111 PARSE ERROR: " + line
             continue
-                
-        if 'text' in data:
+
+        if not (isinstance(data, dict)):
+            #print "DICT ERROR: " + data            
+            pass
+        elif 'delete' in data:
+            #print data['delete']['status']['id']
+            pass
+        else:
             uid  = None
             sid  = None
             printThis = True
@@ -121,6 +134,16 @@ def main():
                     else:
                         printThis = printThis and False
 
+                 ## skip this tweet if user does not meet minimum number of followers
+                if args.minUserFollowers:
+                    if user['followers_count'] < args.minUserFollowers:
+                        printThis = printThis and False
+
+                ## skip this tweet if user does not meet minimum number of tweets
+                if args.minUserTweets:
+                    if user['statuses_count'] < args.minUserTweets:
+                        printThis = printThis and False
+
                 if args.keywordFile:
                     printWord = False
                     text = ''
@@ -142,7 +165,7 @@ def main():
             ## Print if all the prior conditions have been met
             if printThis:
                 ## print tab separated if specified
-                if args.output == 'JSON':
+                if args.output == 'json':
                     print sid, "\t", line
                 else:
                     ## TK: This stuff is all for search API
@@ -166,6 +189,7 @@ def main():
 
                     for e in toProcess:
                         coords = None
+                        u      = e['user']
 
                         ## calculate coordinates. specified in latitude then longitude.
                         if e['coordinates']:
@@ -184,35 +208,38 @@ def main():
                             e['text'] = e['text'].translate( string.maketrans( '\t\n\r', '   ') )
                             e['text'] = e['text'].decode('utf-8')                        
 
+                        userlevel = '0'
+                        ## get the user level, if it exists
+                        if u['id_str'] in users:
+                            userlevel = users[ u['id_str'] ]
+
                         ## print rather basic stuff
                         if args.tweetDetail == 'low':
-                            u = e['user']
                             toPrint.extend([
                                 e['id_str'], 
                                 formatDate( e['created_at'] ),
                                 e['text'], 
                                 u['id_str'], 
                                 u['name'], 
-                                u['screen_name'] 
+                                u['screen_name'],
+                                userlevel
                             ])
-                        elif args.tweetDetail == 'medium':
-                            u = e['user']                            
+                        elif args.tweetDetail == 'medium':                            
                             toPrint.extend([
                                 e['id_str'], 
                                 formatDate( e['created_at'] ),
                                 e['text'],
                                 e['source'],
-                                e['geo'],
                                 coords,
                                 u['id_str'], 
                                 u['name'], 
                                 u['screen_name'],
+                                userlevel,
                                 u['description'],
                                 u['location'],
                                 u['url']
                             ])
                         elif args.tweetDetail == 'high':
-                            u = e['user']
                             toPrint.extend([
                                 e['id_str'], 
                                 formatDate( e['created_at'] ),
@@ -222,6 +249,7 @@ def main():
                                 u['id_str'], 
                                 u['name'], 
                                 u['screen_name'],
+                                userlevel,
                                 u['description'],
                                 u['location'],
                                 u['url'],

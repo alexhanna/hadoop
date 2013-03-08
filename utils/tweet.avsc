@@ -1,31 +1,33 @@
 {
 	"type"      : "record",
 	"name"      : "Tweet",
-	"namespace" : "org.ahanna",
+	"namespace" : "org.ahanna.avro.schema",
 	"fields" : [
 		{
-			"name": "contributors", 
+			"name": "contributors",
+			"default" : null,
 			"type" : ["null", {
 				"type" : "array", 
 				"items": [{
 					"type"      : "record",
 					"name"      : "Contributor",
-					"namespace" : "org.ahanna",
+					"namespace" : "org.ahanna.avro.schema",
 					"fields"    : [
 						{"name": "id", "type" : "long" },
 						{"name": "id_str", "type" : "string"},
 						{"name": "screen_name", "type" : "string"}
 					]
 				}, "long"]
-			}] 
+			}]
 		},
 		{
 			"name": "coordinates",  
+			"default": null,
 			"type" : ["null", 
 			{
 				"type"      : "record",
 				"name"      : "Coordinate",
-				"namespace" : "org.ahanna",
+				"namespace" : "org.ahanna.avro.schema",
 				"fields"    : [
 					{"name" : "coordinates", "type": 
 						{"type" : "array", "items" : "float"} },
@@ -38,16 +40,17 @@
 			"type"      : {
 				"name"      : "EntityGroup",
 				"type"      : "record",
-				"namespace" : "org.ahanna",
+				"namespace" : "org.ahanna.avro.schema",
 				"fields"    : [
 					{
 						"name" : "media",
+						"default": null,
 						"type" : ["null", {
 							"type"          : "array",
 							"items"         : {
 								"name"      : "InnerMedia",
 								"type"      : "record",
-								"namespace" : "org.ahanna",
+								"namespace" : "org.ahanna.avro.schema",
 								"fields"    : [
 									{"name" : "type", "type" : "string"},
 									{"name" : "id", "type": "long"},
@@ -128,7 +131,7 @@
 							"items"         : {
 								"name"      : "hashtag",
 								"type"      : "record",
-								"namespace" : "org.ahanna",
+								"namespace" : "org.ahanna.avro.schema",
 								"fields"    : [
 									{"name" : "indices", "type": { "type": "array", "items": "int" }},
 									{"name" : "text", "type" : "string"}
@@ -143,7 +146,7 @@
 							"items"         : {
 								"name"      : "url",
 								"type"      : "record",
-								"namespace" : "org.ahanna",
+								"namespace" : "org.ahanna.avro.schema",
 								"fields"    : [
 									{"name" : "indices", "type": { "type": "array", "items": "int" }},
 									{"name" : "url", "type" : "string"},
@@ -160,7 +163,7 @@
 							"items" : {
 								"name"      : "user_mention",
 								"type"      : "record",
-								"namespace" : "org.ahanna",
+								"namespace" : "org.ahanna.avro.schema",
 								"fields"    : [
 									{"name" : "indices", "type": { "type": "array", "items": "int" }},
 									{"name" : "name", "type" : "string"},
@@ -176,9 +179,10 @@
 		},
 		{
 			"name": "geo",
+			"default": null,
 			"type" : ["null", {
 					"name"      : "InnerGeo",
-					"namespace" : "org.ahanna",
+					"namespace" : "org.ahanna.avro.schema",
 					"type"      : "record",
 					"fields"    : [
 						{"name":"type", "type":"string"},
@@ -194,10 +198,11 @@
 		},
 		{
 			"name"       : "place",
+			"default"    : null,
 			"type"	     : ["null", {
 				"name"      : "InnerPlace",
 				"type"      : "record",
-				"namespace" : "org.ahanna",
+				"namespace" : "org.ahanna.avro.schema",
 				"fields"    : [
 					{"name": "country", "type": "string"},
 					{"name": "country_code", "type": "string"},
@@ -212,9 +217,10 @@
 						}]
 					},
 					{
-						"name": "bounding_box", 
-						"type": ["null", {
-							"namespace": "org.ahanna",
+						"name"   : "bounding_box",
+						"default": null, 
+						"type"   : ["null", {
+							"namespace": "org.ahanna.avro.schema",
 							"name"     : "BBox",
 							"type"     : "record",
 							"fields"   : [
@@ -243,13 +249,17 @@
 			"type"       : {
 				"name"      : "InnerUser",
 				"type"      : "record",
-				"namespace" : "org.ahanna",
+				"namespace" : "org.ahanna.avro.schema",
 				"fields"   : [
 					{"name": "contributors_enabled", "type" : "boolean"},
 					{"name": "created_at", "type": "string"},
 					{"name": "default_profile", "type": "boolean"},
 					{"name": "default_profile_image", "type": "boolean"},
-					{"name": "description", "type": ["null", "string"]},
+					{
+						"name"   : "description", 
+					    "default": null, 
+					    "type"   : ["null", "string"]
+					},
 					{"name": "favourites_count", "type": "int"},
 					{"name": "followers_count", "type": "int"},
 					{"name": "following", "type": ["null", "boolean"]},
@@ -300,7 +310,11 @@
 		{"name": "possibly_sensitive_editable", "type" : ["boolean", "null"] },
 		{"name": "retweeted",                   "type" : ["boolean", "null"] },
 		{"name": "retweet_count",               "type" : ["int", "null"] },
-		{"name": "retweeted_status",            "type" : ["Tweet", "null"] },
+		{
+			"name"   : "retweeted_status",
+			"default": null,
+			"type"   : ["Tweet", "null"] 
+		},
 		{"name": "source",                      "type" : "string"},
 		{"name": "text",                        "type" : "string"},
 		{"name": "truncated",                   "type" : "boolean"},

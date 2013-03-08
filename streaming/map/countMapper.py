@@ -22,6 +22,7 @@ def validate( x ):
         if type(x) == unicode:
             x = string.replace(x, "\n", " ")
             x = string.replace(x, "\r", " ")
+            x = string.replace(x, "\t", " ")
             return x.encode('utf-8')
         else:
             return str(x)
@@ -55,14 +56,18 @@ def main():
         """This script operates as the mapper part of MapReduce job. 
         Its output is a count of messages that meet the criteria which 
         are set in the options. The reducer is usually a simple sum function.""")
-    parser.add_argument('-d', '--date', choices = ['day','hour','minute'], 
+    parser.add_argument('-d', '--date', default = "day", choices = ['day','hour','minute'], 
         help = "Grouping by datetime. You can group by day, hour, or minute.")
     parser.add_argument('-g', '--geo', action = "store_true", 
         help = "Grouping by geolocation. Rounding to the first decimal point.")
     parser.add_argument('-k', '--keywordFile', default = None, 
         help = "Path of keyword file. If you are trying to group by particular keywords, note the ones you would like to use.")
     parser.add_argument('-l','--level', choices = ['1', '2', '3' ,'all'])
-    parser.add_argument('--levelFile', default = "follow-r3.txt")
+    parser.add_argument('--levelFile', default = "follow-all.txt")
+    parser.add_argument('--minUserFollowers', type = int,
+        help = "Minimum number of followers that the user should have.")
+    parser.add_argument('--minUserTweets', type = int,
+        help = "Minimum number of tweets that the user should have.")
 
     args = parser.parse_args()
 
@@ -111,6 +116,16 @@ def main():
                 else:
                     continue
 
+            ## skip this tweet if user does not meet minimum number of followers
+            if args.minUserFollowers:
+                if user['followers_count'] < args.minUserFollowers:
+                    continue
+
+            ## skip this tweet if user does not meet minimum number of tweets
+            if args.minUserTweets:
+                if user['statuses_count'] < args.minUserTweets:
+                    continue
+
             if args.geo:
                 if data['coordinates']:
                     coords = data['coordinates']['coordinates']
@@ -130,7 +145,7 @@ def main():
             if args.keywordFile:
                 text = ''
                 ## turn text into lower case            
-                if 'retweeted_status' in data:
+                if 'retweeted_status' in data and data['retweeted_status']:
                     text = data['retweeted_status']['text'].lower()
                 else:
                     text = data['text'].lower()
@@ -139,11 +154,11 @@ def main():
                 text = text.encode('utf-8')
 
                 ## copy the array for each word that appears
-                toPrintCopy = list(toPrint)
                 for w in wordList:
                     if w in text:
+                        toPrintCopy = list(toPrint)
                         toPrintCopy.append(w)
-                        toPrintCopy.append('1')
+                        toPrintCopy.append('1')                        
 
                         print "\t".join(toPrintCopy)
             else:

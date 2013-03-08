@@ -58,9 +58,8 @@ def main():
         help = "This is the set of users for which we would want to see the tweets of and replies to.")
     parser.add_argument('-s','--secondaryLevel', choices = ['1', '2', '3'],
         help = "This is the set of users for which we would want to see interactions between and the primary level.")
-    parser.add_argument('--levelFile', default = "follow-r3.txt",
+    parser.add_argument('--levelFile', default = "follow-all.txt",
         help = "File to use for tweet level information.")
-
     parser.add_argument('-t', '--tweetDetail', choices = ['low', 'medium', 'high'], default = 'low',
         help = """The level of detail in output. 'basic' includes status_id, timestamp, text, and basic user information.
         'moderate' includes more information, including user geolocation, user location, and user URL.
@@ -93,11 +92,16 @@ def main():
             reply_uid = data['in_reply_to_user_id_str']
 
             ## print the original tweet if its from the group we're interested in
-            ## TK: implement args.secondaryLevel
-            if uid in users and users[uid] == args.primaryLevel:
-                printThis = True
-            elif reply_uid in users and users[reply_uid] == args.primaryLevel:
-                printThis = True
+            if uid in users:
+                if users[uid] == args.primaryLevel:
+                    printThis = True
+                elif args.secondaryLevel and users[uid] == args.secondaryLevel:
+                    printThis = True
+            elif reply_uid in users:
+                if users[reply_uid] == args.primaryLevel:
+                    printThis = True
+                elif args.secondaryLevel and users[reply_uid] == args.secondaryLevel:
+                    printThis = True
 
             ## TK: Also need to take account of the fact that @replies to the primaryLevel are
             ## collected even when in_reply_to_status_id_str is null

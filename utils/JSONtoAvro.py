@@ -8,7 +8,7 @@ def main():
 		return
 
 	s = schema.parse(open("tweet.avsc").read())
-	f = open(sys.argv[1], 'wb')
+	f = open(sys.argv[1], "wb")
 
 	writer = datafile.DataFileWriter(f, io.DatumWriter(), s, codec = 'deflate')
 
@@ -30,7 +30,7 @@ def main():
 
 	writer.close()
 
-	print str(failed) + " failed"
+	print str(failed) + " failed in schema"
 
 if __name__ == '__main__':
 	main()
