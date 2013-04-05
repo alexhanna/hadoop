@@ -82,6 +82,8 @@ def main():
         help = "Minimum number of followers that the user should have.")
     parser.add_argument('--minUserTweets', type = int,
         help = "Minimum number of tweets that the user should have.")
+    parser.add_argument('--skipRetweets', action = "store_true",
+        help = "Skip the retweets. Only return original tweets.")
 
     args  = parser.parse_args()
 
@@ -103,10 +105,13 @@ def main():
             continue
 
         if not (isinstance(data, dict)):
-            #print "DICT ERROR: " + data            
+            ## not a dictionary, skip
             pass
         elif 'delete' in data:
-            #print data['delete']['status']['id']
+            ## a delete element, skip for now.
+            pass
+        elif 'user' not in data:
+            ## bizarre userless edge case
             pass
         else:
             uid  = None
@@ -126,7 +131,12 @@ def main():
                 uid = str(data['user']['id'])
 
             if args.all:
+                ## all flag is denoted. print this regardless
                 printThis = True                
+            elif args.skipRetweets and retweet:
+                ## skipRetweets flag and retweet is defined
+                ## so skip this tweet
+                printThis = False
             else:
                 if args.level:
                     if uid in users and (args.level == 'all' or users[uid] == args.level):
@@ -166,7 +176,7 @@ def main():
             if printThis:
                 ## print tab separated if specified
                 if args.output == 'json':
-                    print sid, "\t", line
+                    print line
                 else:
                     ## TK: This stuff is all for search API
                     # rt      = None

@@ -81,15 +81,16 @@ def main():
             
         if 'text' in data:
             uid       = None
-            reply_uid = None
             printThis = False
+
+            in_reply_to_user_id_str = None
 
             if 'id_str' in data['user']:
                 uid = data['user']['id_str']
             else:
                 uid = str(data['user']['id'])
 
-            reply_uid = data['in_reply_to_user_id_str']
+            in_reply_to_user_id_str = data['in_reply_to_user_id_str']
 
             ## print the original tweet if its from the group we're interested in
             if uid in users:
@@ -97,25 +98,23 @@ def main():
                     printThis = True
                 elif args.secondaryLevel and users[uid] == args.secondaryLevel:
                     printThis = True
-            elif reply_uid in users:
-                if users[reply_uid] == args.primaryLevel:
+            elif in_reply_to_user_id_str in users:
+                if users[in_reply_to_user_id_str] == args.primaryLevel:
                     printThis = True
-                elif args.secondaryLevel and users[reply_uid] == args.secondaryLevel:
-                    printThis = True
+                #elif args.secondaryLevel and users[in_reply_to_user_id_str] == args.secondaryLevel:
+                #    printThis = True
 
-            ## TK: Also need to take account of the fact that @replies to the primaryLevel are
-            ## collected even when in_reply_to_status_id_str is null
-
+            ## TK: Also need to take account of the fact that @replies to the primaryLevel
             if printThis:
-                if not reply_uid:
-                    reply_uid = '0'
+                if not in_reply_to_user_id_str:
+                    in_reply_to_user_id_str = '0'
 
                 if not data['in_reply_to_status_id_str']:
                     reply = '0'
                 else: 
                     reply = data['in_reply_to_status_id_str']
 
-                toPrint = [data['id_str'], reply, 
+                toPrint = [data['id_str'], reply, in_reply_to_user_id_str,
                     (data['user']['screen_name'] + ": " + data['text'])]
 
                 print "\t".join( map(validate, toPrint) )

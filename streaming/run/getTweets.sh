@@ -5,9 +5,9 @@ hdfs dfs -rm -r output
 
 hadoop jar /usr/lib/hadoop-mapreduce/hadoop-streaming.jar \
     -files $jars,$HOME/sandbox/hadoop/streaming/map/tweetMapper.py,$HOME/sandbox/hadoop/streaming/data/keywords.txt,$HOME/sandbox/hadoop/streaming/data/follow-r1.txt \
-    -input elex2012/elex2012.201202* elex2012/elex2012.201203* elex2012/elex2012.201204* elex2012/elex2012.201205* \
+    -input wirecall \
     -output output \
-    -mapper "tweetMapper.py -l all --levelFile follow-r1.txt -k keywords.txt -r" \
+    -mapper "tweetMapper.py --skipRetweets" \
     -reducer org.apache.hadoop.mapred.lib.IdentityReducer \
     -numReduceTasks 1
 

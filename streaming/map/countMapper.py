@@ -84,9 +84,24 @@ def main():
             data = json.loads(line)
         except ValueError as detail:
             continue
-                
-        if 'text' in data:
-            user    = data['user']            
+
+        if not (isinstance(data, dict)):
+            ## not a dictionary, skip
+            pass
+        elif 'delete' in data:
+            ## a delete element, skip for now.
+            pass
+        elif 'user' not in data:
+            ## bizarre userless edge case
+            pass
+        else:
+            if 'user' in data:
+                user    = data['user']
+            else:
+                ## Debugging this
+                sys.stderr.write(data + "\n")
+                continue
+
             uid     = None
             toPrint = []
             
