@@ -158,7 +158,6 @@ def main():
             ## for keywords, need to handle this a little different because we want this to
             ## print every time there is an instance of the word
             if args.keywordFile:
-                text = ''
                 ## turn text into lower case            
                 if 'retweeted_status' in data and data['retweeted_status']:
                     text = data['retweeted_status']['text'].lower()
@@ -170,7 +169,21 @@ def main():
 
                 ## copy the array for each word that appears
                 for w in wordList:
-                    if w in text:
+                    ## this is a rule with a boolean
+                    ## of the form kw1 & kw2 & ... kwN
+                    if "&" in w:
+                        rules = w.split(" & ")
+                        for r in rules:
+                            ## must meet all the rules
+                            if r not in text:
+                                break
+                        else:
+                            toPrintCopy = list(toPrint)
+                            toPrintCopy.append(w)
+                            toPrintCopy.append('1')
+
+                            print "\t".join(toPrintCopy)
+                    elif w in text:
                         toPrintCopy = list(toPrint)
                         toPrintCopy.append(w)
                         toPrintCopy.append('1')                        
