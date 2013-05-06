@@ -56,7 +56,7 @@ def main():
         """This script operates as the mapper part of MapReduce job. 
         Its output is a count of messages that meet the criteria which 
         are set in the options. The reducer is usually a simple sum function.""")
-    parser.add_argument('-d', '--date', default = "day", choices = ['day','hour','minute'], 
+    parser.add_argument('-d', '--date', choices = ['day','hour','minute'], 
         help = "Grouping by datetime. You can group by day, hour, or minute.")
     parser.add_argument('-g', '--geo', action = "store_true", 
         help = "Grouping by geolocation. Rounding to the first decimal point.")
@@ -68,6 +68,8 @@ def main():
         help = "Minimum number of followers that the user should have.")
     parser.add_argument('--minUserTweets', type = int,
         help = "Minimum number of tweets that the user should have.")
+    parser.add_argument('--user', action = "store_true",
+        help = "Grouping by user id.")
 
     args = parser.parse_args()
 
@@ -95,13 +97,7 @@ def main():
             ## bizarre userless edge case
             pass
         else:
-            if 'user' in data:
-                user    = data['user']
-            else:
-                ## Debugging this
-                sys.stderr.write(data + "\n")
-                continue
-
+            user    = data['user']
             uid     = None
             toPrint = []
             
@@ -118,13 +114,19 @@ def main():
             elif args.date == 'minute':
                 date = time.strftime('%Y-%m-%d %H:%M:00', dt)
 
-            toPrint.append(date)
+            if args.date:
+                toPrint.append(date)
 
             if 'id_str' in user:
                 uid = user['id_str']
             else:
                 uid = str(user['id'])
 
+            ## append user id
+            if args.user:
+                toPrint.append(uid)
+
+            ## append user level
             if args.level:
                 if uid in users and (args.level == 'all' or users[uid] == args.level):
                     toPrint.append(users[uid])
