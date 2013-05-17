@@ -17,7 +17,7 @@ def loadKeywords(path):
 
 def main():
     parser = argparse.ArgumentParser(description = "Mapper for generating user mentions and retweet network data from streaimng API tweets.")
-    parser.add_argument('-d', '--date', default = "none", choices = ['day','hour','minute', 'none'], 
+    parser.add_argument('-d', '--date', choices = ['day','hour','minute'], 
         help = "Grouping by datetime. You can group by day, hour, minute, or none.")
     parser.add_argument('-k', '--keywordFile', default = None, 
         help = "Path of keyword file. If you are trying to group by particular keywords, note the ones you would like to use.")
@@ -48,6 +48,7 @@ def main():
             ## bizarre userless edge case
             pass
         else:
+            toPrint = []
             user = data['user']
 
             ## search API does not have id_str
@@ -68,8 +69,9 @@ def main():
                 date = time.strftime('%Y-%m-%d %H:00:00', dt)
             elif args.date == 'minute':
                 date = time.strftime('%Y-%m-%d %H:%M:00', dt)
-            else:
-                date = time.strftime('%Y-%m-%d %H:%M:%S', dt)
+
+            if args.date:
+                toPrint.append(date)
 
             ## check for keywords in text
             if args.keywordFile:
@@ -95,13 +97,11 @@ def main():
 
             ## get the RT if it exists
             if 'retweeted_status' in data and data['retweeted_status']:
-                print "\t".join([
-                    date,
-                    'retweet',
+                toPrint.extend(['retweet',
                     str(user[id_field]),
                     str(data['retweeted_status']['user'][id_field]),
-                    "1"
-                    ])
+                    "1"])
+                print "\t".join(toPrint)
             else:
                 user_mentions = []
                 if args.search:
@@ -111,14 +111,14 @@ def main():
                     if 'entities' in data and len(data['entities']['user_mentions']) > 0:
                         user_mentions = data['entities']['user_mentions']
 
-                for u2 in user_mentions:                
-                    print "\t".join([
-                        date,
+                for u2 in user_mentions:
+                    toPrint.extend([
                         "user_mention",
                         str(user[id_field]),
                         str(u2[id_field]),
                         "1"
                         ])
+                    print "\t".join(toPrint)
 
 if __name__ == '__main__':
     main()

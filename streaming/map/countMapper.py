@@ -48,6 +48,29 @@ def loadKeywords(path):
         wordList.append( line.strip() )
     f.close()
 
+def loadCoOccurrence(path1, path2):
+    list1 = []
+    list2 = []
+    f = open(path1, 'r')
+    for line in f:
+        line = line.lower()
+        list1.append( line.strip() )
+    f.close()
+
+    f = open(path2, 'r')
+    for line in f:
+        line = line.lower()
+        list2.append( line.strip() )
+    f.close()
+
+    wordList.extend(list1)
+    wordList.extend(list2)
+
+    ## get joint set
+    for x in list1:
+        for y in list2:
+            wordList.append(" & ".join([x, y]))
+
 def main():
     punc  = '.,-'
     trans = rep(len(punc), ' ')
@@ -56,6 +79,8 @@ def main():
         """This script operates as the mapper part of MapReduce job. 
         Its output is a count of messages that meet the criteria which 
         are set in the options. The reducer is usually a simple sum function.""")
+    parser.add_argument('--cfile1', default = None, help = "Path of cooccurrence file 1.")
+    parser.add_argument('--cfile2', default = None, help = "Path of cooccurrence file 2.")
     parser.add_argument('-d', '--date', choices = ['day','hour','minute'], 
         help = "Grouping by datetime. You can group by day, hour, or minute.")
     parser.add_argument('-g', '--geo', action = "store_true", 
@@ -70,11 +95,21 @@ def main():
         help = "Minimum number of tweets that the user should have.")
     parser.add_argument('--user', action = "store_true",
         help = "Grouping by user id.")
+    parser.add_argument('-w', '--whitespace', action = "store_true",
+        help = """Argument that denotes whether to delineate keywords by whitespace or not. 
+        e.g. this tag would not find 'I love @barackobama' but would find 'I love Obama'""")
 
     args = parser.parse_args()
 
     if args.keywordFile:
         loadKeywords( args.keywordFile )
+
+    if args.cfile1:
+        if args.cfile2:
+            loadCoOccurrence(args.cfile1, args.cfile2)
+        else:
+            print "Need to specify second file."
+            sys.exit()
 
     if args.level:
         loadUsers(args.levelFile)
@@ -159,7 +194,7 @@ def main():
 
             ## for keywords, need to handle this a little different because we want this to
             ## print every time there is an instance of the word
-            if args.keywordFile:
+            if args.keywordFile or (args.cfile1 and args.cfile2):
                 ## turn text into lower case            
                 if 'retweeted_status' in data and data['retweeted_status']:
                     text = data['retweeted_status']['text'].lower()
@@ -169,6 +204,10 @@ def main():
                 ## encode text for unicode keywords
                 text = text.encode('utf-8')
 
+                ## cut out punctuation
+                if args.whitespace:
+                    text = text.translate( string.maketrans(punc, trans) )
+
                 ## copy the array for each word that appears
                 for w in wordList:
                     ## this is a rule with a boolean
@@ -176,16 +215,30 @@ def main():
                     if "&" in w:
                         rules = w.split(" & ")
                         for r in rules:
-                            ## must meet all the rules
-                            if r not in text:
-                                break
+
+                            if args.whitespace:
+                                textList = text.split()
+                                if r not in textList:
+                                    break
+                            else:
+                                ## must meet all the rules
+                                if r not in text:
+                                    break
                         else:
                             toPrintCopy = list(toPrint)
                             toPrintCopy.append(w)
                             toPrintCopy.append('1')
 
                             print "\t".join(toPrintCopy)
-                    elif w in text:
+                    else:
+                        if args.whitespace:
+                            textList = text.split()
+                            if w not in textList:
+                                continue
+                        else:
+                            if w not in text:
+                                continue
+
                         toPrintCopy = list(toPrint)
                         toPrintCopy.append(w)
                         toPrintCopy.append('1')                        
