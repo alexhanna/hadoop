@@ -4,10 +4,10 @@
 hdfs dfs -rm -r output
 
 hadoop jar /usr/lib/hadoop-mapreduce/hadoop-streaming.jar \
-    -files $jars,$HOME/sandbox/hadoop/streaming/map/tweetMapper.py,$HOME/sandbox/hadoop/streaming/data/keywords.txt,$HOME/sandbox/hadoop/streaming/data/follow-r1.txt \
-    -input wirecall \
+    -files $jars,$HOME/sandbox/hadoop/streaming/map/tweetMapper.py,$HOME/sandbox/hadoop/streaming/data/handbook.txt,$HOME/sandbox/hadoop/streaming/data/follow-r1.txt \
+    -input elex2012/elex2012.201202* elex2012/elex2012.201203* \
     -output output \
-    -mapper "tweetMapper.py --skipRetweets" \
+    -mapper "tweetMapper.py --hashtag -k handbook.txt --levelFile follow-r1.txt" \
     -reducer org.apache.hadoop.mapred.lib.IdentityReducer \
     -numReduceTasks 1
 
