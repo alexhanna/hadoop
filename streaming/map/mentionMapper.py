@@ -21,6 +21,8 @@ def main():
         help = "Grouping by datetime. You can group by day, hour, minute, or none.")
     parser.add_argument('-k', '--keywordFile', default = None, 
         help = "Path of keyword file. If you are trying to group by particular keywords, note the ones you would like to use.")
+    parser.add_argument('-g', '--geo', action = "store_true", help = "Add geolocation of source and target.")
+    parser.add_argument('-r', '--rt', action = "store_true", help = "Only retweets.")
     parser.add_argument('-s', '--search', action = "store_true",
         help = "Structure of the tweet is slightly different in the search API.")
 
@@ -97,12 +99,41 @@ def main():
 
             ## get the RT if it exists
             if 'retweeted_status' in data and data['retweeted_status']:
-                toPrint.extend(['retweet',
-                    str(user[id_field]),
-                    str(data['retweeted_status']['user'][id_field]),
-                    "1"])
-                print "\t".join(toPrint)
+                rt = data['retweeted_status']
+
+                if args.geo:
+                    src_coords = None
+                    dst_coords = None
+
+                    ## TK: Eventually implement Google API hits for geolocation
+                    if data['coordinates']:
+                        src_coords = ",".join( map(str, reversed(data['coordinates']['coordinates'])) )                            
+                    elif data['geo']:
+                        src_coords = ",".join( map(str, data['geo']['coordinates']) )
+
+                    if rt['coordinates']:
+                        dst_coords = ",".join( map(str, reversed(rt['coordinates']['coordinates'])) )                            
+                    elif rt['geo']:
+                        dst_coords = ",".join( map(str, rt['geo']['coordinates']) )
+
+                    if src_coords != None and dst_coords != None:
+                        toPrint.extend(['retweet',
+                            str(user[id_field]),
+                            str(data['retweeted_status']['user'][id_field]),
+                            src_coords,
+                            dst_coords,
+                            "1"])
+                        print "\t".join(toPrint)
+                else:
+                    toPrint.extend(['retweet',
+                        str(user[id_field]),
+                        str(data['retweeted_status']['user'][id_field]),
+                        "1"])
+                    print "\t".join(toPrint)
             else:
+                if args.rt:
+                    continue
+
                 user_mentions = []
                 if args.search:
                     if 'user_mentions' in data:
