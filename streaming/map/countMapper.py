@@ -138,7 +138,7 @@ def main():
             
             # Parse data in the format of Sat Mar 12 01:49:55 +0000 2011                
             d    = string.split( data['created_at'], ' ')
-            ds   = ' '.join([d[1], d[2], d[3], d[5] ])
+            ds   = ' '.join([d[1], d[2], d[3], d[5]])
             dt   = time.strptime(ds, '%b %d %H:%M:%S %Y')
             date = None
 

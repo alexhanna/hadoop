@@ -5,6 +5,20 @@
 #
 
 import argparse, json, string, sys, time
+from geopy import geocoders
+from geopy.geocoders.googlev3 import *
+
+def validate( x ):
+    if x:
+        if type(x) == unicode:
+            x = string.replace(x, "\n", " ")
+            x = string.replace(x, "\r", " ")
+            x = string.replace(x, "\t", " ")
+            return x.encode('utf-8')
+        else:
+            return str(x)
+    else:
+        return "0"
 
 def loadKeywords(path):
     wordList = []
@@ -22,6 +36,8 @@ def main():
     parser.add_argument('-k', '--keywordFile', default = None, 
         help = "Path of keyword file. If you are trying to group by particular keywords, note the ones you would like to use.")
     parser.add_argument('-g', '--geo', action = "store_true", help = "Add geolocation of source and target.")
+    parser.add_argument('--dstk', help = """Name of the DataScienceToolKit server to use.
+        You can use the www.datasciencetoolkit.org but it's probably more advisable to roll your own on Amazon S3.""")
     parser.add_argument('-r', '--rt', action = "store_true", help = "Only retweets.")
     parser.add_argument('-s', '--search', action = "store_true",
         help = "Structure of the tweet is slightly different in the search API.")
@@ -30,6 +46,10 @@ def main():
 
     if args.keywordFile:
         wordList = loadKeywords( args.keywordFile )
+
+    ## set DSTK server
+    if args.dstk:
+        g = geocoders.GoogleV3(domain = args.dstk)
 
     for line in sys.stdin:
         line = line.strip()
@@ -105,31 +125,46 @@ def main():
                     src_coords = None
                     dst_coords = None
 
-                    ## TK: Eventually implement Google API hits for geolocation
                     if data['coordinates']:
-                        src_coords = ",".join( map(str, reversed(data['coordinates']['coordinates'])) )                            
+                        dst_coords = ",".join( map(str, reversed(data['coordinates']['coordinates'])) )                            
                     elif data['geo']:
-                        src_coords = ",".join( map(str, data['geo']['coordinates']) )
+                        dst_coords = ",".join( map(str, data['geo']['coordinates']) )
+                    elif user['location']:
+                        if args.dstk:
+                            try:
+                                place, (lat, lng) = g.geocode(user['location'])
+                                dst_coords = ",".join( map(str, [lat, lng]) )
+                            except (GQueryError, GTooManyQueriesError, ValueError) as detail:
+                                print detail
+                                dst_coords = user['location'].encode("UTF-8")
 
                     if rt['coordinates']:
-                        dst_coords = ",".join( map(str, reversed(rt['coordinates']['coordinates'])) )                            
+                        src_coords = ",".join( map(str, reversed(rt['coordinates']['coordinates'])) )                            
                     elif rt['geo']:
-                        dst_coords = ",".join( map(str, rt['geo']['coordinates']) )
+                        src_coords = ",".join( map(str, rt['geo']['coordinates']) )
+                    elif rt['user']['location']:
+                        if args.dstk:
+                            try:
+                                place, (lat, lng) = g.geocode(user['location'])
+                                dst_coords = ",".join( map(str, [lat, lng]) )
+                            except (GQueryError, GTooManyQueriesError, ValueError) as detail:
+                                print detail
+                                src_coords = rt['user']['location'].encode("UTF-8")                                
 
-                    if src_coords != None and dst_coords != None:
+                    if src_coords and dst_coords:
                         toPrint.extend(['retweet',
                             str(user[id_field]),
-                            str(data['retweeted_status']['user'][id_field]),
-                            src_coords,
+                            str(rt['user'][id_field]),
                             dst_coords,
+                            src_coords,
                             "1"])
-                        print "\t".join(toPrint)
+                        print "\t".join( map(validate, toPrint) )
                 else:
                     toPrint.extend(['retweet',
                         str(user[id_field]),
                         str(data['retweeted_status']['user'][id_field]),
                         "1"])
-                    print "\t".join(toPrint)
+                    print "\t".join( map(validate, toPrint) )
             else:
                 if args.rt:
                     continue
@@ -149,7 +184,7 @@ def main():
                         str(u2[id_field]),
                         "1"
                         ])
-                    print "\t".join(toPrint)
+                    print "\t".join( map(validate, toPrint) )
 
 if __name__ == '__main__':
     main()

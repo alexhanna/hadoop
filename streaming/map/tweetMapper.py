@@ -69,7 +69,7 @@ def main():
     parser.add_argument('-l','--level', choices = ['1', '2', '3' ,'all'])
     parser.add_argument('--levelFile', default = "follow-r3.txt")
     parser.add_argument('-r', '--retweet', action = "store_true", 
-        help = "Include retweet information. Will output the same level of detail ")
+        help = "Include retweet information. Will output the same level of detail as specified in --level.")
     parser.add_argument('-t', '--tweetDetail', choices = ['low', 'medium', 'high'], default = 'low',
         help = """The level of detail in output. 'basic' includes status_id, timestamp, text, and basic user information.
         'moderate' includes more information, including user geolocation, user location, and user URL.

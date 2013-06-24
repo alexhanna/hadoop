@@ -63,7 +63,7 @@ def main():
             elif data['geo']:
                 coords = ",".join( map(str, data['geo']['coordinates']) )
             elif user['location'] != "":
-                g = geocoders.GoogleV3()
+                g = geocoders.GoogleV3(domain = "www.datasciencetoolkit.org")
 
                 #print user['location']
 
@@ -82,11 +82,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
-
-
-
