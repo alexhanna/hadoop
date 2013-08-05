@@ -1,5 +1,6 @@
 #!/usr/bin/python
-#
+# coding=utf-8
+
 # locationMapper.py
 #  
 # This script extracts location information from tweets using the Google
@@ -55,28 +56,44 @@ def main():
             
             toPrint.append(date)
 
-            coords = "0"
+            coords = None
+            loc    = None
 
             ## calculate coordinates. specified in latitude then longitude.
             if data['coordinates']:
                 coords = ",".join( map(str, reversed(data['coordinates']['coordinates'])) )                            
             elif data['geo']:
                 coords = ",".join( map(str, data['geo']['coordinates']) )
-            elif user['location'] != "":
-                g = geocoders.GoogleV3(domain = "www.datasciencetoolkit.org")
+            elif user['location'] != "" and user['location'] != None:
+                loc = user['location'].lower().encode('utf-8').strip()
 
-                #print user['location']
+                ## some of these have exact locations
+                if loc.startswith('iphone:') or loc.startswith('üt:'):
+                    coords = loc.split(" ")[1]
+                    continue
+
+                ## change this as appropriate
+                g = geocoders.GoogleV3(domain = "ec2-50-16-111-255.compute-1.amazonaws.com")
+
+                ## TK: Build some cache or something that I can store locally
+                ## so I don't have to hit the server so often
 
                 try:
-                    place, (lat, lng) = g.geocode(user['location'])
+                    place, (lat, lng) = g.geocode(loc)
                     coords = ",".join( map(str, [lat, lng]) )
-                except:
+                except Exception as detail:      
+                    print detail              
                     pass
 
-            if coords != "0":
+            if coords:
                 toPrint.append(coords)
                 print "\t".join(toPrint)
+                #print user['location']
                 coded += 1
+            elif loc:
+                pass
+                #toPrint.append(user['location'])
+                #print "\t".join(toPrint)                
 
     print "%s coded out of %s" % (coded, total)
 

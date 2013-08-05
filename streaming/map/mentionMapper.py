@@ -1,10 +1,11 @@
 #!/usr/local/bin/python2.7
+# coding=utf-8
 #
 # mentionMapper.py
 # This gets network info out of tweets.
 #
 
-import argparse, json, string, sys, time
+import argparse, json, re, string, sys, time, urllib2
 from geopy import geocoders
 from geopy.geocoders.googlev3 import *
 
@@ -28,6 +29,35 @@ def loadKeywords(path):
         wordList.append( line.strip() )
     f.close()
     return wordList
+
+def getCoords(data, g, args):
+    user = data['user']
+
+    coords = None
+
+    if 'coordinates' in data and data['coordinates']:
+        coords = ",".join( map(str, reversed(data['coordinates']['coordinates'])) )                            
+    elif 'geo' in data and data['geo']:
+        coords = ",".join( map(str, data['geo']['coordinates']) )
+    elif 'location' in user and user['location'] and user['location'] != "":
+        loc = user['location'].lower().encode('utf-8').strip()
+
+        ## some of these have exact locations
+        if loc.startswith('iphone:') or loc.startswith('üt:'):
+            coords = loc
+        elif re.match(r"\-{0,1}[0-9]+.[0-9]+,\s*\-{0,1}[0-9]+.[0-9]+", loc):
+            coords = loc
+        elif args.dstk:
+            try:
+                place, (lat, lng) = g.geocode(user['location'])
+                dst_coords = ",".join( map(str, [lat, lng]) )
+            except (GQueryError, GTooManyQueriesError, ValueError, urllib2.HTTPError) as detail:
+                #sys.stderr.write("Error: " + detail.__str__() + ": " + loc + "\n")
+                pass
+        #else:
+        #   coords = loc
+
+    return coords
 
 def main():
     parser = argparse.ArgumentParser(description = "Mapper for generating user mentions and retweet network data from streaimng API tweets.")
@@ -119,50 +149,28 @@ def main():
 
             ## get the RT if it exists
             if 'retweeted_status' in data and data['retweeted_status']:
-                rt = data['retweeted_status']
+                orig = data['retweeted_status']
 
                 if args.geo:
-                    src_coords = None
-                    dst_coords = None
+                    retweeted_coords = getCoords(data, g, args)
+                    orig_coords      = getCoords(orig, g, args)
 
-                    if data['coordinates']:
-                        dst_coords = ",".join( map(str, reversed(data['coordinates']['coordinates'])) )                            
-                    elif data['geo']:
-                        dst_coords = ",".join( map(str, data['geo']['coordinates']) )
-                    elif user['location']:
-                        if args.dstk:
-                            try:
-                                place, (lat, lng) = g.geocode(user['location'])
-                                dst_coords = ",".join( map(str, [lat, lng]) )
-                            except (GQueryError, GTooManyQueriesError, ValueError) as detail:
-                                print detail
-                                dst_coords = user['location'].encode("UTF-8")
-
-                    if rt['coordinates']:
-                        src_coords = ",".join( map(str, reversed(rt['coordinates']['coordinates'])) )                            
-                    elif rt['geo']:
-                        src_coords = ",".join( map(str, rt['geo']['coordinates']) )
-                    elif rt['user']['location']:
-                        if args.dstk:
-                            try:
-                                place, (lat, lng) = g.geocode(user['location'])
-                                dst_coords = ",".join( map(str, [lat, lng]) )
-                            except (GQueryError, GTooManyQueriesError, ValueError) as detail:
-                                print detail
-                                src_coords = rt['user']['location'].encode("UTF-8")                                
-
-                    if src_coords and dst_coords:
+                    if orig_coords and retweeted_coords:
                         toPrint.extend(['retweet',
+                            str(orig['user'][id_field]),
                             str(user[id_field]),
-                            str(rt['user'][id_field]),
-                            dst_coords,
-                            src_coords,
+                            orig['created_at'],
+                            data['created_at'],
+                            orig_coords,
+                            rt_coords,
                             "1"])
                         print "\t".join( map(validate, toPrint) )
                 else:
                     toPrint.extend(['retweet',
+                        str(orig['user'][id_field]),
                         str(user[id_field]),
-                        str(data['retweeted_status']['user'][id_field]),
+                        orig['created_at'],
+                        data['created_at'],
                         "1"])
                     print "\t".join( map(validate, toPrint) )
             else:

@@ -76,6 +76,8 @@ def main():
         'high' includes the most available information in the tweet.""")
     parser.add_argument('--hashtag', action = "store_true",
         help = "Instead of text, this outputs the hashtags.")
+    parser.add_argument('--starttime', help = "Start time.")
+    parser.add_argument('--endtime', help = "End time.")
     parser.add_argument('-o', '--output', default="tab", choices = ['tab', 'json'],
         help = "Output format for the tweet.")
     parser.add_argument('--minUserFollowers', type = int,
@@ -92,6 +94,17 @@ def main():
 
     if args.level:
         loadUsers(args.levelFile)    
+
+
+    if args.starttime and args.endtime:
+        try:
+            ## we expect datetime to be in the format YYYY-MM-DD HH:MM:SS
+            st = time.strptime(args.starttime, '%Y-%m-%d %H:%M:%S')
+            et = time.strptime(args.endtime, '%Y-%m-%d %H:%M:%S')
+        except:
+            sys.stderr.write("Error: Time improperly specified.\n")
+            return
+
 
     for line in sys.stdin:
         line = line.strip()
@@ -138,6 +151,15 @@ def main():
                 ## so skip this tweet
                 printThis = False
             else:
+                if args.starttime and args.endtime:
+                    tt = time.strptime(formatDate( data['created_at'] ), '%Y-%m-%d %H:%M:%S')
+
+                    ## do the comparison
+                    if tt >= st and tt <= et:
+                        printThis = printThis and True
+                    else:
+                        printThis = printThis and False
+
                 if args.level:
                     if uid in users and (args.level == 'all' or users[uid] == args.level):
                         printThis = printThis and True
