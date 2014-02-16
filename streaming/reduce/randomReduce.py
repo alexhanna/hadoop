@@ -1,6 +1,6 @@
-#!/usr/bin/env python
+#!/usr/local/bin/python2.7
 
-import json, string, sys
+import string, sys
 
 def main():
     count = 0
@@ -11,8 +11,8 @@ def main():
 
         count += 1
                 
-        ## take every tenth tweet
-        if count % 100 == 0:
+        ## take Xth tweet
+        if count % 1000 == 0:
             print line
 
 if __name__ == '__main__':

@@ -5,7 +5,7 @@
 # This gets network info out of tweets.
 #
 
-import argparse, json, re, string, sys, time, urllib2
+import argparse, copy, json, re, string, sys, time, urllib2
 from geopy import geocoders
 from geopy.geocoders.googlev3 import *
 
@@ -68,6 +68,7 @@ def main():
     parser.add_argument('-g', '--geo', action = "store_true", help = "Add geolocation of source and target.")
     parser.add_argument('--dstk', help = """Name of the DataScienceToolKit server to use.
         You can use the www.datasciencetoolkit.org but it's probably more advisable to roll your own on Amazon S3.""")
+    parser.add_argument('--printDate', action = "store_true")
     parser.add_argument('-r', '--rt', action = "store_true", help = "Only retweets.")
     parser.add_argument('-s', '--search', action = "store_true",
         help = "Structure of the tweet is slightly different in the search API.")
@@ -158,20 +159,31 @@ def main():
                     if orig_coords and retweeted_coords:
                         toPrint.extend(['retweet',
                             str(orig['user'][id_field]),
-                            str(user[id_field]),
+                            str(user[id_field])])
+
+                        if args.printDate:
+                            toPrint.extend([
                             orig['created_at'],
-                            data['created_at'],
+                            data['created_at']])
+                                           
+                        toPrint.extend([
                             orig_coords,
                             rt_coords,
                             "1"])
+
                         print "\t".join( map(validate, toPrint) )
                 else:
                     toPrint.extend(['retweet',
                         str(orig['user'][id_field]),
-                        str(user[id_field]),
+                        str(user[id_field])])
+
+                    if args.printDate:
+                        toPrint.extend([
                         orig['created_at'],
-                        data['created_at'],
-                        "1"])
+                        data['created_at']])
+                        
+                    toPrint.extend(["1"])
+
                     print "\t".join( map(validate, toPrint) )
             else:
                 if args.rt:
@@ -186,13 +198,15 @@ def main():
                         user_mentions = data['entities']['user_mentions']
 
                 for u2 in user_mentions:
-                    toPrint.extend([
+                    toPrintCopy = copy.copy(toPrint)
+                    toPrintCopy.extend([
                         "user_mention",
                         str(user[id_field]),
                         str(u2[id_field]),
                         "1"
                         ])
-                    print "\t".join( map(validate, toPrint) )
+
+                    print "\t".join( map(validate, toPrintCopy) )
 
 if __name__ == '__main__':
     main()

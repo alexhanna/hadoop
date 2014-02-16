@@ -11,10 +11,6 @@ users    = {}
 wordList = []
 
 def formatDate(dateString):
-    ## elex2010 data is already in good format, so check for that
-    if re.match(r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}", dateString):
-        return dateString
-
     # Parse data in the format of Sat Mar 12 01:49:55 +0000 2011
     d  = string.split( dateString, ' ')
     ds = ' '.join([d[1], d[2], d[3], d[5] ])
@@ -78,6 +74,7 @@ def main():
         help = """The level of detail in output. 'basic' includes status_id, timestamp, text, and basic user information.
         'moderate' includes more information, including user geolocation, user location, and user URL.
         'high' includes the most available information in the tweet.""")
+    parser.add_argument('--nth', default = 100, type = int, help = "Outputs the nth tweet")
     parser.add_argument('--hashtag', action = "store_true",
         help = "Instead of text, this outputs the hashtags.")
     parser.add_argument('--starttime', help = "Start time.")
@@ -90,7 +87,6 @@ def main():
         help = "Minimum number of tweets that the user should have.")
     parser.add_argument('--skipRetweets', action = "store_true",
         help = "Skip the retweets. Only return original tweets.")
-    parser.add_argument('--sample', type = int, help = "Take every Nth tweet. I think this won't work with MapReduce. Use randomReduce.py for that.")
 
     args  = parser.parse_args()
 
@@ -98,7 +94,7 @@ def main():
         loadKeywords( args.keywordFile )
 
     if args.level:
-        loadUsers(args.levelFile)
+        loadUsers(args.levelFile)    
 
     if args.starttime and args.endtime:
         try:
@@ -118,8 +114,6 @@ def main():
             data = json.loads(line)
         except ValueError as detail:
             ## print the line when it messes up, but clean it up first
-            #line = line.translate( string.maketrans( '\t\n\r', '   ') )
-            #print "11111111 PARSE ERROR: " + line
             continue
 
         if not (isinstance(data, dict)):
@@ -131,20 +125,17 @@ def main():
         elif 'user' not in data:
             ## bizarre userless edge case
             pass
-        elif type(data['text']) != unicode:
-            ## text is int for some goddamn reason?!
-            pass
         else:
             count += 1
-
-            ## take the Nth tweet
-            if args.sample and count % args.sample != 0:
-                continue
 
             uid  = None
             sid  = None
             printThis = True
             
+            ## skip this is it isn't to be sampled
+            if count % args.nth != 0:
+                continue
+
             retweet = data.get('retweeted_status', None)
 
             if 'id_str' in data:
@@ -208,7 +199,7 @@ def main():
 
                     printThis = printThis and printWord
 
-            ## Print if all the prior conditions have been met
+            # Print if all the prior conditions have been met
             if printThis:
                 ## print tab separated if specified
                 if args.output == 'json':
@@ -238,11 +229,10 @@ def main():
                         u      = e['user']
 
                         ## calculate coordinates. specified in latitude then longitude.
-                        if 'coordinates' in e and 'geo' in e:
-                            if e['coordinates']:
-                                coords = ",".join( map(str, reversed(e['coordinates']['coordinates'])) )                            
-                            elif e['geo']:
-                                coords = ",".join( map(str, e['geo']['coordinates']) )
+                        if e['coordinates']:
+                            coords = ",".join( map(str, reversed(e['coordinates']['coordinates'])) )                            
+                        elif e['geo']:
+                            coords = ",".join( map(str, e['geo']['coordinates']) )
 
                         if args.hashtag:
                             if len(e['entities']['hashtags']):
@@ -255,6 +245,11 @@ def main():
                             e['text'] = e['text'].translate( string.maketrans( '\t\n\r', '   ') )
                             e['text'] = e['text'].decode('utf-8')                        
 
+                        userlevel = '0'
+                        ## get the user level, if it exists
+                        if u['id_str'] in users:
+                            userlevel = users[ u['id_str'] ]
+
                         ## print rather basic stuff
                         if args.tweetDetail == 'low':
                             toPrint.extend([
@@ -263,7 +258,8 @@ def main():
                                 e['text'], 
                                 u['id_str'], 
                                 u['name'], 
-                                u['screen_name']
+                                u['screen_name'],
+                                userlevel
                             ])
                         elif args.tweetDetail == 'medium':                            
                             toPrint.extend([
@@ -275,6 +271,7 @@ def main():
                                 u['id_str'], 
                                 u['name'], 
                                 u['screen_name'],
+                                userlevel,
                                 u['description'],
                                 u['location'],
                                 u['url']
@@ -289,6 +286,7 @@ def main():
                                 u['id_str'], 
                                 u['name'], 
                                 u['screen_name'],
+                                userlevel,
                                 u['description'],
                                 u['location'],
                                 u['url'],
@@ -300,8 +298,7 @@ def main():
 
                     print "\t".join( map(validate, toPrint) )
 
-                    
-
+                
 if __name__ == '__main__':
     main()
     
